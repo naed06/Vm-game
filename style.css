@@ -1,3 +1,4 @@
+/* 1. BASE STYLES (The Default TV/Laptop View) */
 :root {
     --bg-dark: #120c1d;
     --bg-accent: #2d1a45;
@@ -19,7 +20,7 @@ body, html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
-    overflow: hidden;
+    overflow: hidden; /* Prevents unwanted scrolling */
 }
 
 .main-container {
@@ -29,7 +30,7 @@ body, html {
     width: 100vw;
 }
 
-/* Header Styles */
+/* Header/Nav */
 .header {
     display: flex;
     justify-content: space-between;
@@ -58,18 +59,13 @@ body, html {
     border-bottom-color: var(--vm-red);
 }
 
-.user-status .icon {
-    margin-left: 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
 /* Hero Section */
 .hero {
     flex: 2;
     padding: 0 60px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .hero-title {
@@ -97,7 +93,7 @@ body, html {
     letter-spacing: 1px;
 }
 
-/* Shelf/Grid Section */
+/* Shelf/Tiles */
 .shelf {
     flex: 1.5;
     padding: 20px 60px 40px 60px;
@@ -105,7 +101,6 @@ body, html {
 
 .shelf-title {
     font-size: 1.4rem;
-    font-weight: 500;
     margin-bottom: 20px;
 }
 
@@ -122,76 +117,75 @@ body, html {
     border-radius: 6px;
     position: relative;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
-    cursor: pointer;
 }
 
 .tile.focused {
     transform: scale(1.08);
     border-color: var(--text-white);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    z-index: 5;
 }
 
 .tile-overlay {
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
     padding: 15px;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
 }
 
 .tile-label {
     font-weight: bold;
-    font-size: 1.1rem;
     text-transform: uppercase;
 }
-/* Add this to the bottom of your style.css file */
 
-@media (max-width: 768px) {
-    body {
-        overflow-y: auto; /* Allow scrolling on mobile */
-    }
-
+/* 2. MOBILE PORTRAIT (Vertical) */
+@media (max-width: 768px) and (orientation: portrait) {
     .main-container {
-        height: auto;
+        justify-content: space-between;
         padding: 20px;
     }
 
-    .header {
-        padding: 20px;
-        flex-wrap: wrap; /* Wrap menu items if they don't fit */
-        gap: 15px;
-    }
-
-    .nav-links {
-        gap: 15px;
-        font-size: 12px;
-    }
-
-    .hero {
-        padding: 40px 20px;
-        text-align: center;
-        align-items: center;
-    }
-
-    .hero-title {
-        font-size: 3rem; /* Smaller title for mobile screens */
-    }
-
-    .shelf {
-        padding: 20px;
-    }
+    .header { padding: 10px 0; justify-content: center; }
+    .nav-links { gap: 12px; font-size: 11px; }
+    
+    .hero { flex: 1; padding: 0; }
+    .hero-title { font-size: 3rem; }
 
     .tile-row {
-        flex-direction: column; /* Stack tiles vertically on mobile */
-        align-items: center;
-        gap: 30px;
+        overflow-x: auto;
+        padding-bottom: 20px;
+        scrollbar-width: none;
     }
 
     .tile {
-        width: 100%; /* Tiles take full width of the phone */
-        max-width: 340px;
-        height: 190px;
+        flex: 0 0 75%; /* Allows user to see a peek of the next tile */
+        height: 140px;
+    }
+}
+
+/* 3. MOBILE LANDSCAPE (Side-ways) */
+@media (max-height: 450px) and (orientation: landscape) {
+    .main-container {
+        padding: 10px 40px;
+        justify-content: space-around;
+    }
+
+    .header { padding: 0; }
+    .nav-links { gap: 20px; font-size: 11px; }
+
+    .hero {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .hero-title { font-size: 2rem; }
+    #hero-desc { margin: 0; font-size: 0.9rem; }
+    .play-button { display: none; }
+
+    .shelf { padding: 0; }
+    .shelf-title { display: none; }
+
+    .tile {
+        width: 200px;
+        height: 100px;
     }
 }
