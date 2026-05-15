@@ -19,7 +19,7 @@ body, html {
     position: relative;
 }
 
-/* --- THE FULL-COLOR GITHUB HOSTED LOGO --- */
+/* --- THE LOGO BACKGROUND --- */
 .background-watermark {
     position: fixed;
     top: 50%; left: 50%;
@@ -91,12 +91,18 @@ body, html {
 .option-btn.correct { background: #2e7d32 !important; border-color: #4caf50 !important; }
 .option-btn.wrong { background: #c62828 !important; border-color: #f44336 !important; }
 
-/* --- ROTATE SCREEN & RESPONSIVENESS --- */
+/* --- SMART ROTATE SCREEN & RESPONSIVENESS --- */
 #rotate-message { display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
-@media (orientation: portrait) { #rotate-message { display: flex; } }
+
+/* ONLY show rotation block if it's portrait AND a mobile/touch pointer device */
+@media (orientation: portrait) and (hover: none) and (pointer: coarse) { 
+    #rotate-message { display: flex; } 
+}
+
 .phone-icon { font-size: 80px; color: var(--text-white); margin-bottom: 20px; animation: rotate-me 2s infinite; }
 @keyframes rotate-me { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
 
+/* Mobile landscape view tweaks */
 @media (max-height: 450px) and (orientation: landscape) {
     .header { height: 50px; padding: 0 20px; }
     .hero-title { font-size: 2.2rem; }
