@@ -3,7 +3,7 @@
     --bg-accent: #2d1a45;
     --vm-red: #e21b23;
     --text-white: #ffffff;
-    --text-dim: rgba(255, 255, 255, 0.6);
+    --text-dim: rgba(255, 255, 255, 0.4);
     --tile-bg: rgba(255, 255, 255, 0.1);
 }
 
@@ -13,84 +13,98 @@ body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100dvh;
     font-family: 'Segoe UI', sans-serif;
-    background-color: var(--bg-dark);
-    background-image: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
+    background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
     overflow: hidden; 
 }
 
-/* --- THE WASHED OUT LOGO FIX --- */
-.washed-out-logo {
+/* --- THE LOGO BACKGROUND --- */
+.background-overlay {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70vw; 
-    height: 70vh;
-    /* Using a reliable PNG source */
-    background-image: url('https://www.virginmedia.com/content/dam/virginmedia/dotcom/images/logos/virgin-media-o2-logo.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.05; /* Slightly increased visibility */
-    z-index: 0; 
-    pointer-events: none;
-    filter: brightness(0) invert(1); /* Makes it a white watermark */
-}
-
-.main-container {
+    inset: 0;
     display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    width: 100vw;
-    position: relative;
-    z-index: 10; /* Content stays on top */
-    background: transparent;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.04; /* Very subtle like a watermark */
 }
 
-/* --- ICONS & UI --- */
-.material-icons-outlined { font-size: 18px; vertical-align: middle; margin-right: 5px; }
+/* Creating a simple "Infinity" loop shape using CSS to represent the logo */
+.vm-logo-shape {
+    width: 300px;
+    height: 150px;
+    border: 40px solid white;
+    border-radius: 100px;
+    transform: rotate(-15deg);
+}
 
+/* --- ROTATE MESSAGE --- */
 #rotate-message {
     display: none; position: fixed; inset: 0;
-    background: var(--bg-dark); z-index: 1000;
+    background: var(--bg-dark); z-index: 2000;
     text-align: center; justify-content: center; align-items: center; flex-direction: column;
 }
 
+@media (orientation: portrait) {
+    #rotate-message { display: flex; }
+}
+
 .phone-icon { 
-    font-size: 80px; color: var(--text-dim); margin-bottom: 20px; 
-    display: inline-block; animation: rotate-me 2s ease-in-out infinite; 
+    font-size: 80px; color: var(--text-white); margin-bottom: 20px; 
+    animation: rotate-me 2s ease-in-out infinite; 
 }
 
 @keyframes rotate-me {
-    0% { transform: rotate(0deg); }
-    30% { transform: rotate(90deg); }
-    70% { transform: rotate(90deg); }
-    100% { transform: rotate(0deg); }
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
 }
 
-.header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+/* --- MAIN LAYOUT --- */
+.main-container {
+    display: flex; flex-direction: column;
+    height: 100dvh; width: 100vw;
+    position: relative; z-index: 10;
+}
+
+.header {
+    height: 60px; display: flex; justify-content: space-between; 
+    align-items: center; padding: 0 30px;
+}
+
 .nav-links { display: flex; gap: 20px; }
-.nav-item { text-transform: uppercase; letter-spacing: 1px; font-weight: 600; font-size: 11px; color: var(--text-dim); cursor: pointer; }
+.nav-item {
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+    font-size: 11px; color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center;
+}
 .nav-item.active { color: var(--text-white); border-bottom: 2px solid var(--vm-red); }
 
-.content-area { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 5px 30px 15px 30px; }
+.content-area {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: space-between; padding: 5px 30px 15px 30px;
+}
+
 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .hero-title { font-size: clamp(2rem, 10vh, 4rem); font-weight: 800; margin: 0; }
 #hero-desc { color: var(--text-dim); margin: 2px 0; font-size: 0.9rem; }
 
 .shelf { flex-shrink: 0; }
-.tile-row { display: flex; gap: 10px; height: 35vh; max-height: 160px; }
-.tile { flex: 1; background: var(--tile-bg); border: 2px solid transparent; border-radius: 8px; position: relative; display: flex; justify-content: center; align-items: center; }
+.tile-row { display: flex; gap: 12px; height: 35vh; max-height: 160px; }
+
+.tile {
+    flex: 1; background: var(--tile-bg); border: 2px solid transparent;
+    border-radius: 8px; position: relative;
+    display: flex; justify-content: center; align-items: center;
+}
 .tile.focused { border-color: white; background: rgba(255,255,255,0.15); }
-.tile .tile-icon { font-size: clamp(30px, 8vh, 50px); color: var(--text-dim); }
+.tile-icon { font-size: 40px; color: var(--text-dim); }
 .tile.focused .tile-icon { color: var(--vm-red); }
-.tile-label { position: absolute; bottom: 8px; left: 8px; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; }
+.tile-label { position: absolute; bottom: 8px; left: 10px; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; }
 
 @media (max-height: 450px) and (orientation: landscape) {
     .header { height: 45px; }
     .hero-title { font-size: 1.5rem; }
     #hero-desc { display: none; }
-    .tile-row { height: 45vh; }
-    .tile .tile-icon { font-size: 35px; }
+    .tile-row { height: 48vh; }
 }
