@@ -1,4 +1,4 @@
-// Simple click handling for tiles and menu
+// Handle Navigation
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
         document.querySelector('.nav-item.active').classList.remove('active');
@@ -6,10 +6,16 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
+// Handle Tile Focus
 document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
-        document.querySelector('.tile.focused').classList.remove('focused');
+        const currentFocused = document.querySelector('.tile.focused');
+        if (currentFocused) currentFocused.classList.remove('focused');
         tile.classList.add('focused');
-        console.log("Tile selected: " + tile.innerText);
     });
+});
+
+// Settings Button
+document.querySelector('.settings-btn').addEventListener('click', () => {
+    alert("Settings menu coming soon!");
 });
