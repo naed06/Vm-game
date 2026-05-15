@@ -13,29 +13,26 @@ body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100dvh;
     font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
+    background-color: var(--bg-dark);
     color: var(--text-white);
     overflow: hidden;
     position: relative;
 }
 
-/* --- THE INFINITY LOOP GRAPHIC --- */
+/* --- THE ACTUAL BRANDING GRAPHIC --- */
 .background-graphic {
     position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-5deg);
-    width: 140vw; /* Bleeds off screen for that cinematic look */
-    height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 500'%3E%3Cpath fill='none' stroke='white' stroke-width='25' d='M200 250c0-80 60-140 140-140s140 60 140 140-60 140-140 140-140-60-140-140zm320 0c0-80 60-140 140-140s140 60 140 140-60 140-140 140-140-60-140-140z' opacity='0.3'/%3E%3C/svg%3E");
-    background-size: contain;
+    inset: 0;
+    /* This URL uses a high-res version of the 'swish' loop */
+    background-image: linear-gradient(rgba(15, 10, 26, 0.7), rgba(15, 10, 26, 0.7)), 
+                      url('https://www.virginmedia.com/content/dam/virginmedia/dotcom/images/mobile/backgrounds/red-swish-desktop.png');
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.07; /* Adjusted for better visibility */
     z-index: 0;
     pointer-events: none;
 }
 
-/* --- LAYOUT --- */
 .main-container {
     position: relative; z-index: 10;
     display: flex; flex-direction: column;
@@ -82,7 +79,6 @@ body, html {
 .tile.focused .tile-icon { color: var(--vm-red); }
 .tile-label { position: absolute; bottom: 12px; left: 15px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
 
-/* --- ROTATE SCREEN --- */
 #rotate-message {
     display: none; position: fixed; inset: 0;
     background: var(--bg-dark); z-index: 9999;
@@ -92,7 +88,6 @@ body, html {
 .phone-icon { font-size: 80px; color: var(--text-white); margin-bottom: 20px; animation: rotate-me 2s infinite; }
 @keyframes rotate-me { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
 
-/* --- MOBILE LANDSCAPE TWEAKS --- */
 @media (max-height: 450px) and (orientation: landscape) {
     .header { height: 50px; padding: 0 20px; }
     .hero-title { font-size: 2.2rem; }
