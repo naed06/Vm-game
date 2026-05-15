@@ -2,59 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retail Training Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VM-Game Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <div id="rotate-message">
+        <div class="message-content">
+            <div class="phone-icon">🔄</div>
+            <h2>Please Rotate Your Device</h2>
+            <p>This dashboard is designed for landscape view.</p>
+        </div>
+    </div>
+
     <div class="main-container">
-        <!-- Top Navigation Bar -->
         <header class="header">
-            <div class="nav-links">
-                <div class="nav-item" id="nav-search">Search 🔍</div>
-                <div class="nav-item active" id="nav-home">Home</div>
-                <div class="nav-item" id="nav-guide">Guide</div>
-                <div class="nav-item" id="nav-apps">Apps</div>
-                <div class="nav-item" id="nav-games">Games</div>
-            </div>
-            <div class="user-status">
-                <span class="icon">⚙️</span>
-                <span class="icon">👤</span>
-            </div>
+            <div class="logo">VM-GAME</div>
+            <nav class="nav-links">
+                <div class="nav-item active">Home</div>
+                <div class="nav-item">Apps</div>
+                <div class="nav-item">Games</div>
+                <div class="nav-item">Leaderboard</div>
+            </nav>
         </header>
 
-        <!-- Hero Feature Section (Top 2/3) -->
-        <section class="hero" id="hero-section">
-            <div class="hero-content">
-                <h1 id="hero-title">sales sprint</h1>
-                <p id="hero-desc">1 series • Simulation • Strategy</p>
-                <div class="play-button">Play</div>
-            </div>
+        <section class="hero">
+            <h1 class="hero-title">sales sprint</h1>
+            <p id="hero-desc">Track your daily targets and compete with your team.</p>
+            <div class="play-button">Open Dashboard</div>
         </section>
 
-        <!-- Mini-Game Shelf (Bottom 1/3) -->
         <section class="shelf">
-            <h2 class="shelf-title">Top picks</h2>
-            <div class="tile-row" id="game-row">
-                <div class="tile focused" data-name="sales sprint" data-desc="1 series • Simulation • Strategy">
+            <h2 class="shelf-title">Top Picks</h2>
+            <div class="tile-row">
+                <div class="tile focused">
                     <div class="tile-overlay">
-                        <span class="tile-label">Sales Sprint</span>
+                        <div class="tile-label">Tariff Titan</div>
                     </div>
                 </div>
-                <div class="tile" data-name="tariff titan" data-desc="1 series • Trivia • Mobile">
+                <div class="tile">
                     <div class="tile-overlay">
-                        <span class="tile-label">Tariff Titan</span>
+                        <div class="tile-label">Broadband Blitz</div>
                     </div>
                 </div>
-                <div class="tile" data-name="service star" data-desc="1 series • Puzzle • Care">
+                <div class="tile">
                     <div class="tile-overlay">
-                        <span class="tile-label">Service Star</span>
-                    </div>
-                </div>
-                <div class="tile" data-name="leaderboard" data-desc="Global • Standings • Rewards">
-                    <div class="tile-overlay">
-                        <span class="tile-label">Leaderboard</span>
+                        <div class="tile-label">Team Scores</div>
                     </div>
                 </div>
             </div>
