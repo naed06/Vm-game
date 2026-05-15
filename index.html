@@ -23,7 +23,7 @@
         <header class="header">
             <div class="header-spacer"></div> 
             <nav class="nav-links">
-                <div class="nav-item active"><span class="material-icons-outlined">home</span> HOME</div>
+                <div class="nav-item active" id="nav-home"><span class="material-icons-outlined">home</span> HOME</div>
                 <div class="nav-item"><span class="material-icons-outlined">apps</span> APPS</div>
                 <div class="nav-item"><span class="material-icons-outlined">sports_esports</span> GAMES</div>
                 <div class="nav-item"><span class="material-icons-outlined">leaderboard</span> LEADERBOARD</div>
@@ -31,32 +31,53 @@
             <div class="settings-btn material-icons-outlined" id="settings-trigger">settings</div>
         </header>
 
-        <main class="content-area">
+        <main class="content-area" id="dashboard-view">
             <section class="hero">
                 <h1 class="hero-title">sales sprint</h1>
                 <p id="hero-desc">Track targets and team performance.</p>
-                </section>
+            </section>
 
             <section class="shelf">
                 <div class="tile-row">
-                    <div class="tile focused">
+                    <div class="tile focused" id="tile-titan">
                         <span class="tile-icon material-icons-outlined">stars</span>
                         <div class="tile-overlay"><div class="tile-label">TARIFF TITAN</div></div>
                     </div>
-                    <div class="tile">
+                    <div class="tile" id="tile-broadband">
                         <span class="material-icons-outlined tile-icon">wifi</span>
                         <div class="tile-overlay"><div class="tile-label">BROADBAND</div></div>
                     </div>
-                    <div class="tile">
+                    <div class="tile" id="tile-scores">
                         <span class="material-icons-outlined tile-icon">group</span>
                         <div class="tile-overlay"><div class="tile-label">SCORES</div></div>
                     </div>
-                    <div class="tile">
+                    <div class="tile" id="tile-incentives">
                         <span class="material-icons-outlined tile-icon">emoji_events</span>
                         <div class="tile-overlay"><div class="tile-label">INCENTIVES</div></div>
                     </div>
                 </div>
             </section>
+        </main>
+
+        <main class="content-area hidden" id="game-view">
+            <div class="game-container">
+                <div class="game-header">
+                    <button class="back-btn" id="game-back-btn"><span class="material-icons-outlined">arrow_back</span> Back to Hub</button>
+                    <div class="game-stats">
+                        <div class="stat-box">SCORE: <span id="game-score">0</span></div>
+                        <div class="stat-box">TIMER: <span id="game-timer">20</span>s</div>
+                    </div>
+                </div>
+                
+                <div class="game-play-area">
+                    <div class="scenario-card">
+                        <h3>Scenario:</h3>
+                        <p id="scenario-text">Loading up your first customer challenge...</p>
+                    </div>
+                    <div class="options-grid" id="options-container">
+                        </div>
+                </div>
+            </div>
         </main>
     </div>
 
