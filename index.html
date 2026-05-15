@@ -4,43 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VM-Game Hub</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="rotate-message">
         <div class="message-content">
-            <div class="phone-icon">🔄</div>
+            <div class="phone-icon material-icons-outlined">screen_rotation</div>
             <h2>Please Rotate Your Device</h2>
             <p>This dashboard is designed for landscape view.</p>
         </div>
     </div>
+
+    <div class="washed-out-logo"></div>
+
     <div class="main-container">
         <header class="header">
             <div class="logo">VM-GAME</div>
             <nav class="nav-links">
-                <div class="nav-item active">Home</div>
-                <div class="nav-item">Apps</div>
-                <div class="nav-item">Games</div>
-                <div class="nav-item">Leaderboard</div>
+                <div class="nav-item active"><span class="material-icons-outlined">home</span> Home</div>
+                <div class="nav-item"><span class="material-icons-outlined">apps</span> Apps</div>
+                <div class="nav-item"><span class="material-icons-outlined">sports_esports</span> Games</div>
+                <div class="nav-item"><span class="material-icons-outlined">leaderboard</span> Leaderboard</div>
             </nav>
-            <div class="settings-btn" id="settings-trigger">⚙️</div>
+            <div class="settings-btn material-icons-outlined" id="settings-trigger">settings</div>
         </header>
+
         <main class="content-area">
             <section class="hero">
                 <h1 class="hero-title">sales sprint</h1>
                 <p id="hero-desc">Track targets and team performance.</p>
                 <div class="play-button">Open Dashboard</div>
             </section>
+
             <section class="shelf">
                 <div class="tile-row">
-                    <div class="tile focused"><div class="tile-overlay"><div class="tile-label">Tariff Titan</div></div></div>
-                    <div class="tile"><div class="tile-overlay"><div class="tile-label">Broadband</div></div></div>
-                    <div class="tile"><div class="tile-overlay"><div class="tile-label">Scores</div></div></div>
-                    <div class="tile"><div class="tile-overlay"><div class="tile-label">Incentives</div></div></div>
+                    <div class="tile focused">
+                        <span class="tile-icon material-icons-outlined">stars</span>
+                        <div class="tile-overlay"><div class="tile-label">Tariff Titan</div></div>
+                    </div>
+                    <div class="tile">
+                        <span class="tile-icon material-icons-outlined">wifi</span>
+                        <div class="tile-overlay"><div class="tile-label">Broadband</div></div>
+                    </div>
+                    <div class="tile">
+                        <span class="tile-icon material-icons-outlined">group</span>
+                        <div class="tile-overlay"><div class="tile-label">Scores</div></div>
+                    </div>
+                    <div class="tile">
+                        <span class="tile-icon material-icons-outlined">emoji_events</span>
+                        <div class="tile-overlay"><div class="tile-label">Incentives</div></div>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
