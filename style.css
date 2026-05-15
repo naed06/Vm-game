@@ -1,0 +1,148 @@
+:root {
+    --bg-dark: #120c1d;
+    --bg-accent: #2d1a45;
+    --vm-red: #e21b23;
+    --text-white: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.6);
+    --tile-bg: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
+    color: var(--text-white);
+    overflow: hidden;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 60px;
+    z-index: 10;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-item {
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dim);
+    padding-bottom: 8px;
+    border-bottom: 4px solid transparent;
+}
+
+.nav-item.active {
+    color: var(--text-white);
+    border-bottom-color: var(--vm-red);
+}
+
+.user-status .icon {
+    margin-left: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    flex: 2;
+    padding: 0 60px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 0;
+    text-transform: lowercase;
+    letter-spacing: -2px;
+}
+
+#hero-desc {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    margin: 10px 0 30px 0;
+}
+
+.play-button {
+    background: rgba(255, 255, 255, 0.2);
+    width: fit-content;
+    padding: 12px 40px;
+    border-radius: 4px;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Shelf/Grid Section */
+.shelf {
+    flex: 1.5;
+    padding: 20px 60px 40px 60px;
+}
+
+.shelf-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.tile-row {
+    display: flex;
+    gap: 20px;
+}
+
+.tile {
+    width: 300px;
+    height: 168px;
+    background: var(--tile-bg);
+    border: 4px solid transparent;
+    border-radius: 6px;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
+    cursor: pointer;
+}
+
+.tile.focused {
+    transform: scale(1.08);
+    border-color: var(--text-white);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 5;
+}
+
+.tile-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+}
+
+.tile-label {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
