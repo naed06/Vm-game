@@ -11,7 +11,8 @@
 
 body, html {
     margin: 0; padding: 0;
-    width: 100%; height: 100%;
+    width: 100%; 
+    height: 100dvh; /* Dynamic height for mobile browsers */
     font-family: 'Segoe UI', sans-serif;
     background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
@@ -24,62 +25,51 @@ body, html {
     text-align: center; justify-content: center; align-items: center; flex-direction: column;
 }
 
-.phone-icon { font-size: 50px; margin-bottom: 20px; animation: rotate-animation 2s infinite; }
-@keyframes rotate-animation { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
-
 .main-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
 }
 
 .header {
-    height: 70px;
+    height: 60px;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 40px; flex-shrink: 0;
+    padding: 0 30px; flex-shrink: 0;
 }
 
-.nav-links { display: flex; gap: 30px; }
+.nav-links { display: flex; gap: 20px; }
 .nav-item {
     text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
-    font-size: 13px; color: var(--text-dim); cursor: pointer;
+    font-size: 12px; color: var(--text-dim); cursor: pointer;
 }
-.nav-item.active { color: var(--text-white); border-bottom: 3px solid var(--vm-red); }
-
-.settings-btn { font-size: 24px; cursor: pointer; }
+.nav-item.active { color: var(--text-white); border-bottom: 2px solid var(--vm-red); }
 
 .content-area {
-    flex-grow: 1;
+    flex: 1;
     display: flex; flex-direction: column;
     justify-content: space-between;
-    padding: 10px 40px 20px 40px;
-    min-height: 0; /* Critical for flex shrinking */
-}
-
-.hero { 
-    flex-grow: 1;
-    display: flex; flex-direction: column; justify-content: center;
+    padding: 5px 30px 15px 30px;
     min-height: 0;
 }
 
-.hero-title { font-size: clamp(2rem, 12vh, 4.5rem); font-weight: 800; margin: 0; text-transform: lowercase; }
-#hero-desc { color: var(--text-dim); margin: 5px 0; font-size: clamp(0.8rem, 3vh, 1.1rem); }
-
-.play-button {
-    background: rgba(255, 255, 255, 0.15); padding: 8px 20px;
-    border-radius: 4px; font-weight: bold; width: fit-content; margin-top: 10px;
+.hero { 
+    flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
 }
 
-.shelf { flex-shrink: 0; margin-top: auto; }
-.tile-row { display: flex; gap: 15px; height: 28vh; min-height: 110px; }
+.hero-title { font-size: clamp(2rem, 10vh, 4rem); font-weight: 800; margin: 0; }
+#hero-desc { color: var(--text-dim); margin: 2px 0; font-size: 0.9rem; }
+
+.shelf { flex-shrink: 0; }
+.tile-row { display: flex; gap: 10px; height: 35vh; max-height: 160px; }
 
 .tile {
     flex: 1; background: var(--tile-bg); border: 2px solid transparent;
-    border-radius: 8px; position: relative; transition: 0.2s; cursor: pointer;
+    border-radius: 8px; position: relative; transition: 0.2s;
 }
-.tile.focused { border-color: white; transform: scale(1.02); background: rgba(255,255,255,0.15); }
-.tile-label { position: absolute; bottom: 8px; left: 10px; font-weight: bold; font-size: 0.7rem; text-transform: uppercase; }
+.tile.focused { border-color: white; background: rgba(255,255,255,0.15); }
+.tile-label { position: absolute; bottom: 8px; left: 8px; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; }
 
 @media (orientation: portrait) {
     #rotate-message { display: flex; }
@@ -87,10 +77,8 @@ body, html {
 }
 
 @media (max-height: 450px) and (orientation: landscape) {
-    .header { height: 50px; padding: 0 20px; }
-    .content-area { padding: 0 20px 10px 20px; }
-    .hero-title { font-size: 1.8rem; }
-    #hero-desc { display: none; }
-    .play-button { display: none; }
-    .tile-row { height: 42vh; }
+    .header { height: 45px; }
+    .hero-title { font-size: 1.5rem; }
+    #hero-desc, .play-button { display: none; }
+    .tile-row { height: 45vh; }
 }
