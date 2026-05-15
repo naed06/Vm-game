@@ -13,7 +13,3 @@ document.querySelectorAll('.tile').forEach(tile => {
         tile.classList.add('focused');
     });
 });
-
-document.getElementById('settings-trigger').addEventListener('click', () => {
-    alert("Settings menu coming soon!");
-});
