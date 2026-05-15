@@ -19,17 +19,17 @@ body, html {
     position: relative;
 }
 
-/* --- THE FULL-COLOR LOGO BACKGROUND (Fixed to logo.png) --- */
+/* --- THE FULL-COLOR GITHUB HOSTED LOGO --- */
 .background-watermark {
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 85vw; height: 85vh;
-    background-image: url('logo.png'); /* Points directly to your uploaded PNG */
+    background-image: url('logo.png');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.15; /* Lets the vibrant brand colors show through gently */
+    opacity: 0.15; 
     z-index: 0;
     pointer-events: none;
 }
@@ -42,6 +42,8 @@ body, html {
 
 /* --- UI ELEMENTS --- */
 .header { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+.header-spacer { width: 24px; } /* Replaces logo space to keep navigation centered */
+
 .nav-links { display: flex; gap: 30px; }
 .nav-item { text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-size: 11px; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; gap: 8px; }
 .nav-item.active { color: var(--text-white); border-bottom: 3px solid var(--vm-red); padding-bottom: 5px; }
@@ -49,8 +51,7 @@ body, html {
 .content-area { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 40px 30px 40px; }
 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .hero-title { font-size: clamp(3rem, 12vh, 6rem); font-weight: 800; margin: 0; text-transform: lowercase; }
-#hero-desc { color: var(--text-dim); margin: 5px 0 20px 0; font-size: 1.1rem; }
-.play-button { background: rgba(255, 255, 255, 0.15); padding: 10px 30px; border-radius: 4px; font-weight: 700; width: fit-content; text-transform: uppercase; margin-top: 10px; }
+#hero-desc { color: var(--text-dim); margin: 5px 0 0 0; font-size: 1.1rem; }
 
 .shelf { flex-shrink: 0; }
 .tile-row { display: flex; gap: 15px; height: 32vh; max-height: 180px; }
@@ -69,6 +70,6 @@ body, html {
 @media (max-height: 450px) and (orientation: landscape) {
     .header { height: 50px; padding: 0 20px; }
     .hero-title { font-size: 2.2rem; }
-    #hero-desc, .play-button { display: none; }
+    #hero-desc { display: none; }
     .tile-row { height: 48vh; gap: 10px; }
 }
