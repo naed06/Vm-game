@@ -91,11 +91,21 @@ body, html {
 .option-btn.correct { background: #2e7d32 !important; border-color: #4caf50 !important; }
 .option-btn.wrong { background: #c62828 !important; border-color: #f44336 !important; }
 
-/* --- SMART ROTATE SCREEN & RESPONSIVENESS --- */
-#rotate-message { display: none; position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
+/* --- THE ROTATION ENGINE FIXED --- */
+#rotate-message { 
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: var(--bg-dark); 
+    z-index: 9999; 
+    text-align: center; 
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column; 
+}
 
-/* ONLY show rotation block if it's portrait AND a mobile/touch pointer device */
-@media (orientation: portrait) and (hover: none) and (pointer: coarse) { 
+/* Force block on screens that are vertically tall (phones held upright) */
+@media (max-width: 767px) and (orientation: portrait) { 
     #rotate-message { display: flex; } 
 }
 
