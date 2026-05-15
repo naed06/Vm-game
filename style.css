@@ -16,51 +16,30 @@ body, html {
     background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
     overflow: hidden;
+    position: relative;
 }
 
-/* --- THE BACKGROUND LOGO --- */
-.background-logo-container {
+/* --- THE INFINITY LOOP GRAPHIC --- */
+.background-graphic {
     position: fixed;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vh;
-    opacity: 0.03; /* Extremely faint watermark */
+    transform: translate(-50%, -50%) rotate(-5deg);
+    width: 140vw; /* Bleeds off screen for that cinematic look */
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 500'%3E%3Cpath fill='none' stroke='white' stroke-width='25' d='M200 250c0-80 60-140 140-140s140 60 140 140-60 140-140 140-140-60-140-140zm320 0c0-80 60-140 140-140s140 60 140 140-60 140-140 140-140-60-140-140z' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.07; /* Adjusted for better visibility */
     z-index: 0;
     pointer-events: none;
 }
 
-.background-logo-container svg {
-    width: 100%; height: 100%;
-}
-
-/* --- ROTATE MESSAGE --- */
-#rotate-message {
-    display: none; position: fixed; inset: 0;
-    background: var(--bg-dark); z-index: 9999;
-    text-align: center; justify-content: center; align-items: center; flex-direction: column;
-}
-
-/* Forces the message to show in portrait */
-@media (orientation: portrait) {
-    #rotate-message { display: flex; }
-}
-
-.phone-icon { 
-    font-size: 80px; color: var(--text-white); margin-bottom: 20px; 
-    animation: rotate-me 2s ease-in-out infinite; 
-}
-
-@keyframes rotate-me {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(90deg); }
-}
-
-/* --- MAIN LAYOUT --- */
+/* --- LAYOUT --- */
 .main-container {
+    position: relative; z-index: 10;
     display: flex; flex-direction: column;
     height: 100dvh; width: 100vw;
-    position: relative; z-index: 10;
 }
 
 .header {
@@ -75,8 +54,6 @@ body, html {
     display: flex; align-items: center; gap: 8px;
 }
 .nav-item.active { color: var(--text-white); border-bottom: 3px solid var(--vm-red); padding-bottom: 5px; }
-
-.settings-btn { font-size: 24px; cursor: pointer; color: var(--text-dim); }
 
 .content-area {
     flex: 1; display: flex; flex-direction: column;
@@ -105,11 +82,20 @@ body, html {
 .tile.focused .tile-icon { color: var(--vm-red); }
 .tile-label { position: absolute; bottom: 12px; left: 15px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
 
+/* --- ROTATE SCREEN --- */
+#rotate-message {
+    display: none; position: fixed; inset: 0;
+    background: var(--bg-dark); z-index: 9999;
+    text-align: center; justify-content: center; align-items: center; flex-direction: column;
+}
+@media (orientation: portrait) { #rotate-message { display: flex; } }
+.phone-icon { font-size: 80px; color: var(--text-white); margin-bottom: 20px; animation: rotate-me 2s infinite; }
+@keyframes rotate-me { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
+
+/* --- MOBILE LANDSCAPE TWEAKS --- */
 @media (max-height: 450px) and (orientation: landscape) {
     .header { height: 50px; padding: 0 20px; }
-    .content-area { padding: 0 20px 15px 20px; }
-    .hero-title { font-size: 2rem; }
+    .hero-title { font-size: 2.2rem; }
     #hero-desc, .play-button { display: none; }
     .tile-row { height: 48vh; gap: 10px; }
-    .tile-icon { font-size: 35px; }
 }
