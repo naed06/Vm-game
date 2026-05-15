@@ -146,3 +146,52 @@ body, html {
     font-size: 1.1rem;
     text-transform: uppercase;
 }
+/* Add this to the bottom of your style.css file */
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto; /* Allow scrolling on mobile */
+    }
+
+    .main-container {
+        height: auto;
+        padding: 20px;
+    }
+
+    .header {
+        padding: 20px;
+        flex-wrap: wrap; /* Wrap menu items if they don't fit */
+        gap: 15px;
+    }
+
+    .nav-links {
+        gap: 15px;
+        font-size: 12px;
+    }
+
+    .hero {
+        padding: 40px 20px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .hero-title {
+        font-size: 3rem; /* Smaller title for mobile screens */
+    }
+
+    .shelf {
+        padding: 20px;
+    }
+
+    .tile-row {
+        flex-direction: column; /* Stack tiles vertically on mobile */
+        align-items: center;
+        gap: 30px;
+    }
+
+    .tile {
+        width: 100%; /* Tiles take full width of the phone */
+        max-width: 340px;
+        height: 190px;
+    }
+}
