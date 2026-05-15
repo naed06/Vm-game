@@ -1,10 +1,10 @@
 :root {
-    --bg-dark: #120c1d;
+    --bg-dark: #0f0a1a;
     --bg-accent: #2d1a45;
     --vm-red: #e21b23;
     --text-white: #ffffff;
     --text-dim: rgba(255, 255, 255, 0.4);
-    --tile-bg: rgba(255, 255, 255, 0.1);
+    --tile-bg: rgba(255, 255, 255, 0.08);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -15,37 +15,33 @@ body, html {
     font-family: 'Segoe UI', sans-serif;
     background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-/* --- THE LOGO BACKGROUND --- */
-.background-overlay {
+/* --- THE BACKGROUND LOGO --- */
+.background-logo-container {
     position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 60vh;
+    opacity: 0.03; /* Extremely faint watermark */
     z-index: 0;
     pointer-events: none;
-    opacity: 0.04; /* Very subtle like a watermark */
 }
 
-/* Creating a simple "Infinity" loop shape using CSS to represent the logo */
-.vm-logo-shape {
-    width: 300px;
-    height: 150px;
-    border: 40px solid white;
-    border-radius: 100px;
-    transform: rotate(-15deg);
+.background-logo-container svg {
+    width: 100%; height: 100%;
 }
 
 /* --- ROTATE MESSAGE --- */
 #rotate-message {
     display: none; position: fixed; inset: 0;
-    background: var(--bg-dark); z-index: 2000;
+    background: var(--bg-dark); z-index: 9999;
     text-align: center; justify-content: center; align-items: center; flex-direction: column;
 }
 
+/* Forces the message to show in portrait */
 @media (orientation: portrait) {
     #rotate-message { display: flex; }
 }
@@ -68,43 +64,52 @@ body, html {
 }
 
 .header {
-    height: 60px; display: flex; justify-content: space-between; 
-    align-items: center; padding: 0 30px;
+    height: 70px; display: flex; justify-content: space-between; 
+    align-items: center; padding: 0 40px;
 }
 
-.nav-links { display: flex; gap: 20px; }
+.nav-links { display: flex; gap: 30px; }
 .nav-item {
-    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
     font-size: 11px; color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center;
+    display: flex; align-items: center; gap: 8px;
 }
-.nav-item.active { color: var(--text-white); border-bottom: 2px solid var(--vm-red); }
+.nav-item.active { color: var(--text-white); border-bottom: 3px solid var(--vm-red); padding-bottom: 5px; }
+
+.settings-btn { font-size: 24px; cursor: pointer; color: var(--text-dim); }
 
 .content-area {
     flex: 1; display: flex; flex-direction: column;
-    justify-content: space-between; padding: 5px 30px 15px 30px;
+    justify-content: space-between; padding: 10px 40px 30px 40px;
 }
 
 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.hero-title { font-size: clamp(2rem, 10vh, 4rem); font-weight: 800; margin: 0; }
-#hero-desc { color: var(--text-dim); margin: 2px 0; font-size: 0.9rem; }
+.hero-title { font-size: clamp(3rem, 12vh, 6rem); font-weight: 800; margin: 0; text-transform: lowercase; }
+#hero-desc { color: var(--text-dim); margin: 5px 0 20px 0; font-size: 1.1rem; }
+
+.play-button {
+    background: rgba(255, 255, 255, 0.15); padding: 10px 30px;
+    border-radius: 4px; font-weight: 700; width: fit-content; text-transform: uppercase;
+}
 
 .shelf { flex-shrink: 0; }
-.tile-row { display: flex; gap: 12px; height: 35vh; max-height: 160px; }
+.tile-row { display: flex; gap: 15px; height: 32vh; max-height: 180px; }
 
 .tile {
     flex: 1; background: var(--tile-bg); border: 2px solid transparent;
-    border-radius: 8px; position: relative;
+    border-radius: 12px; position: relative;
     display: flex; justify-content: center; align-items: center;
 }
-.tile.focused { border-color: white; background: rgba(255,255,255,0.15); }
-.tile-icon { font-size: 40px; color: var(--text-dim); }
+.tile.focused { border-color: white; background: rgba(255,255,255,0.12); transform: scale(1.02); }
+.tile-icon { font-size: 45px; color: var(--text-dim); }
 .tile.focused .tile-icon { color: var(--vm-red); }
-.tile-label { position: absolute; bottom: 8px; left: 10px; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; }
+.tile-label { position: absolute; bottom: 12px; left: 15px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
 
 @media (max-height: 450px) and (orientation: landscape) {
-    .header { height: 45px; }
-    .hero-title { font-size: 1.5rem; }
-    #hero-desc { display: none; }
-    .tile-row { height: 48vh; }
+    .header { height: 50px; padding: 0 20px; }
+    .content-area { padding: 0 20px 15px 20px; }
+    .hero-title { font-size: 2rem; }
+    #hero-desc, .play-button { display: none; }
+    .tile-row { height: 48vh; gap: 10px; }
+    .tile-icon { font-size: 35px; }
 }
