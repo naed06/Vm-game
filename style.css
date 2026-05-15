@@ -1,6 +1,6 @@
 :root {
     --bg-dark: #120c1d;
-    --bg-accent: #2d1a45; /* Blue/Red Virgin Hue */
+    --bg-accent: #2d1a45;
     --vm-red: #e21b23;
     --text-white: #ffffff;
     --text-dim: rgba(255, 255, 255, 0.6);
@@ -13,49 +13,44 @@ body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100dvh;
     font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
+    background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at center, var(--bg-accent) 0%, var(--bg-dark) 100%);
     color: var(--text-white);
     overflow: hidden; 
-    position: relative;
 }
 
-/* --- THE WASHED OUT LOGO --- */
+/* --- THE WASHED OUT LOGO FIX --- */
 .washed-out-logo {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80vw; /* Takes up most of the screen */
-    height: 80vh;
-    /* This URL uses a standard VM logo from the web */
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ea/Virgin_Media_logo_%282011%29.png');
+    width: 70vw; 
+    height: 70vh;
+    /* Using a reliable PNG source */
+    background-image: url('https://www.virginmedia.com/content/dam/virginmedia/dotcom/images/logos/virgin-media-o2-logo.png');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.03; /* Extremely faint, like a TV screen background */
-    z-index: 1; /* Sits behind your content but in front of the radial background */
-    pointer-events: none; /* User taps right through it */
-    filter: brightness(0) invert(1); /* Forces it to be white so it fades correctly */
+    opacity: 0.05; /* Slightly increased visibility */
+    z-index: 0; 
+    pointer-events: none;
+    filter: brightness(0) invert(1); /* Makes it a white watermark */
 }
 
-/* --- THE MAIN CONTENT (needs to sit on top of the logo) --- */
 .main-container {
     display: flex;
     flex-direction: column;
     height: 100dvh;
     width: 100vw;
     position: relative;
-    z-index: 10; /* Ensures content is on top of the faint logo */
+    z-index: 10; /* Content stays on top */
+    background: transparent;
 }
 
-/* --- GOOGLE ICONS GLOBAL POLISH --- */
-.material-icons-outlined {
-    font-size: 18px; /* Default small size for nav */
-    vertical-align: middle;
-    margin-right: 5px;
-}
+/* --- ICONS & UI --- */
+.material-icons-outlined { font-size: 18px; vertical-align: middle; margin-right: 5px; }
 
-/* --- ROTATE MESSAGE --- */
 #rotate-message {
     display: none; position: fixed; inset: 0;
     background: var(--bg-dark); z-index: 1000;
@@ -63,11 +58,8 @@ body, html {
 }
 
 .phone-icon { 
-    font-size: 80px; /* Big rotating icon */
-    color: var(--text-dim);
-    margin-bottom: 20px; 
-    display: inline-block;
-    animation: rotate-me 2s ease-in-out infinite; 
+    font-size: 80px; color: var(--text-dim); margin-bottom: 20px; 
+    display: inline-block; animation: rotate-me 2s ease-in-out infinite; 
 }
 
 @keyframes rotate-me {
@@ -77,69 +69,28 @@ body, html {
     100% { transform: rotate(0deg); }
 }
 
-/* --- NAV & HEADER --- */
-.header {
-    height: 60px; display: flex; justify-content: space-between; 
-    align-items: center; padding: 0 30px; flex-shrink: 0;
-}
-
-.logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
-
+.header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
 .nav-links { display: flex; gap: 20px; }
-.nav-item {
-    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
-    font-size: 11px; color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center;
-}
+.nav-item { text-transform: uppercase; letter-spacing: 1px; font-weight: 600; font-size: 11px; color: var(--text-dim); cursor: pointer; }
 .nav-item.active { color: var(--text-white); border-bottom: 2px solid var(--vm-red); }
-.nav-item.active .material-icons-outlined { color: var(--vm-red); }
 
-.settings-btn { font-size: 24px; cursor: pointer; color: var(--text-dim); margin-left: 10px; }
-
-/* --- HERO & CONTENT --- */
-.content-area {
-    flex: 1; display: flex; flex-direction: column;
-    justify-content: space-between; padding: 5px 30px 15px 30px;
-    min-height: 0;
-}
-
+.content-area { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 5px 30px 15px 30px; }
 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.hero-title { font-size: clamp(2rem, 10vh, 4rem); font-weight: 800; margin: 0; text-transform: lowercase; }
+.hero-title { font-size: clamp(2rem, 10vh, 4rem); font-weight: 800; margin: 0; }
 #hero-desc { color: var(--text-dim); margin: 2px 0; font-size: 0.9rem; }
 
-.play-button {
-    background: rgba(255, 255, 255, 0.15); padding: 8px 20px;
-    border-radius: 4px; font-weight: bold; width: fit-content; margin-top: 10px;
-}
-
-/* --- TILES --- */
 .shelf { flex-shrink: 0; }
 .tile-row { display: flex; gap: 10px; height: 35vh; max-height: 160px; }
-
-.tile {
-    flex: 1; background: var(--tile-bg); border: 2px solid transparent;
-    border-radius: 8px; position: relative; transition: 0.2s;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-}
-
+.tile { flex: 1; background: var(--tile-bg); border: 2px solid transparent; border-radius: 8px; position: relative; display: flex; justify-content: center; align-items: center; }
 .tile.focused { border-color: white; background: rgba(255,255,255,0.15); }
-
-/* Tile Icon Polish */
-.tile .tile-icon {
-    font-size: clamp(30px, 8vh, 50px); /* Responsive icon size */
-    color: var(--text-dim);
-    margin-right: 0; /* Center it */
-}
+.tile .tile-icon { font-size: clamp(30px, 8vh, 50px); color: var(--text-dim); }
 .tile.focused .tile-icon { color: var(--vm-red); }
-
 .tile-label { position: absolute; bottom: 8px; left: 8px; font-weight: bold; font-size: 0.65rem; text-transform: uppercase; }
 
-/* --- LANDSCAPE ADJUSTMENTS --- */
 @media (max-height: 450px) and (orientation: landscape) {
-    .washed-out-logo { width: 50vw; } /* Shrinks the logo on mobile landscape to sit centrally */
     .header { height: 45px; }
     .hero-title { font-size: 1.5rem; }
-    #hero-desc, .play-button { display: none; }
+    #hero-desc { display: none; }
     .tile-row { height: 45vh; }
-    .tile .tile-icon { font-size: 35px; } /* Shrinks icons for the tight layout */
+    .tile .tile-icon { font-size: 35px; }
 }
