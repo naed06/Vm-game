@@ -18,19 +18,24 @@ let currentScenarioIndex = 0;
 // Authentic Retail Core Tariff Scenarios
 const scenarios = [
     {
-        text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage and occasional browsing. What is the lowest airtime price point?",
-        options: ["£29.99/mo", "£12.00/mo", "£39.99/mo", "£15.00/mo"],
-        correct: "£12.00/mo"
+        text: "Customer needs an absolute budget entry-level plan primarily for light usage and occasional browsing. What is the lowest available price point?",
+        options: ["£29.99/mo", "£19.99/mo", "£17.99/mo", "£22.99/mo"],
+        correct: "£19.99/mo"
     },
     {
-        text: "A heavy user streams movies on the go and requires a premium, completely unrestricted unlimited airtime configuration. What is the top tier tariff pricing?",
+        text: "A heavy user who streams movies and games online, requires a premium, completely unrestricted connection. What is the top tier solus tariff pricing?",
         options: ["£29.99/mo", "£38.49/mo", "£39.99/mo", "£25.00/mo"],
-        correct: "£39.99/mo"
+        correct: "£29.99/mo"
     },
     {
-        text: "A family is looking for a balanced mid-tier plan that offers solid data capability without breaking the bank. Which standard airtime pricing fits this sweet spot?",
-        options: ["£38.49/mo", "£29.99/mo", "£12.00/mo", "£39.99/mo"],
-        correct: "£29.99/mo"
+        text: "A family is looking for a balanced mid-tier plan that offers solid data capability without breaking the bank. Which solus broadband pricing fits this sweet spot?",
+        options: ["£38.49/mo", "£29.99/mo", "£22.99/mo", "£39.99/mo"],
+        correct: "£22.99/mo"
+    }
+    {
+        text: "How much extra does it cost to add on Netflix for customers looking at our broadband options",
+        options: ["£2.00/mo", "£3.00/mo", "£2.99/mo", "£3.99/mo"],
+        correct: "£2.00/mo"
     }
 ];
 
