@@ -31,9 +31,9 @@ const scenarios = [
         text: "A family is looking for a balanced mid-tier plan that offers solid data capability without breaking the bank. Which solus broadband pricing fits this sweet spot?",
         options: ["£38.49/mo", "£29.99/mo", "£22.99/mo", "£39.99/mo"],
         correct: "£22.99/mo"
-    }
+    },
     {
-        text: "How much extra does it cost to add on Netflix for customers looking at our broadband options",
+        text: "How much extra does it cost to add on Netflix for customers looking at our broadband options?",
         options: ["£2.00/mo", "£3.00/mo", "£2.99/mo", "£3.99/mo"],
         correct: "£2.00/mo"
     }
