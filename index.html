@@ -2,102 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VM-Game Hub</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Hub Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Rotation Overlay -->
-    <div id="rotate-message">
-        <div class="message-content">
-            <div class="phone-icon material-icons-outlined">screen_rotation</div>
-            <h2>Please Rotate Your Device</h2>
-            <p>This dashboard is designed for landscape view.</p>
-        </div>
-    </div>
-
-    <!-- The Full-Color Logo Background Layer -->
-    <div class="background-watermark"></div>
-
-    <div class="main-container">
-        <header class="header">
-            <div class="header-spacer"></div> 
-            <nav class="nav-links">
-                <div class="nav-item active" id="nav-home"><span class="material-icons-outlined">home</span> HOME</div>
-                <div class="nav-item"><span class="material-icons-outlined">apps</span> APPS</div>
-                <div class="nav-item"><span class="material-icons-outlined">sports_esports</span> GAMES</div>
-                <div class="nav-item"><span class="material-icons-outlined">leaderboard</span> LEADERBOARD</div>
-            </nav>
-            <div class="settings-btn material-icons-outlined" id="settings-trigger" style="cursor: pointer;">settings</div>
+    <!-- ========================================== -->
+    <!--          VIEW 1: HOME DASHBOARD            -->
+    <!-- ========================================== -->
+    <div id="dashboard-view" class="view">
+        <header class="app-header">
+            <h1>RETAIL HUB</h1>
+            <button id="settings-trigger" class="icon-btn">⚙️</button>
         </header>
 
-        <!-- MAIN DASHBOARD VIEW -->
-        <main class="content-area" id="dashboard-view">
-            <section class="hero">
-                <h1 class="hero-title">sales sprint</h1>
-                <p id="hero-desc">Track targets and team performance.</p>
-            </section>
+        <main class="grid-container">
+            <!-- Game Launcher Tile -->
+            <div class="tile focused" id="tile-titan">
+                <div class="tile-icon">⚡</div>
+                <div class="tile-title">Tariff Titans</div>
+            </div>
 
-            <section class="shelf">
-                <div class="tile-row">
-                    <div class="tile focused" id="tile-titan">
-                        <span class="tile-icon material-icons-outlined">stars</span>
-                        <div class="tile-overlay"><div class="tile-label">TARIFF TITAN</div></div>
-                    </div>
-                    <div class="tile" id="tile-broadband">
-                        <span class="material-icons-outlined tile-icon">wifi</span>
-                        <div class="tile-overlay"><div class="tile-label">BROADBAND</div></div>
-                    </div>
-                    <div class="tile" id="tile-scores">
-                        <span class="material-icons-outlined tile-icon">group</span>
-                        <div class="tile-overlay"><div class="tile-label">SCORES</div></div>
-                    </div>
-                    <div class="tile" id="tile-incentives">
-                        <span class="material-icons-outlined tile-icon">emoji_events</span>
-                        <div class="tile-overlay"><div class="tile-label">INCENTIVES</div></div>
-                    </div>
-                </div>
-            </section>
-        </main>
+            <!-- High Scores Tile (Triggers Leaderboard) -->
+            <div class="tile" id="highscore-trigger">
+                <div class="tile-icon">🏆</div>
+                <div class="tile-title">High Scores</div>
+            </div>
 
-        <!-- TARIFF TITAN GAME SCREEN VIEW -->
-        <main class="content-area hidden" id="game-view">
-            <div class="game-container">
-                <div class="game-header">
-                    <button class="back-btn" id="game-back-btn"><span class="material-icons-outlined">arrow_back</span> Back to Hub</button>
-                    <div class="game-stats">
-                        <div class="stat-box">SCORE: <span id="game-score">0</span></div>
-                        <div class="stat-box">TIMER: <span id="game-timer">20</span>s</div>
-                    </div>
-                </div>
-                
-                <div class="game-play-area">
-                    <div class="scenario-card">
-                        <h3>Scenario:</h3>
-                        <p id="scenario-text">Loading up your first customer challenge...</p>
-                    </div>
-                    <div class="options-grid" id="options-container">
-                        <!-- Options generated dynamically via JS -->
-                    </div>
-                </div>
+            <div class="tile">
+                <div class="tile-icon">📈</div>
+                <div class="tile-title">Performance</div>
+            </div>
+
+            <div class="tile">
+                <div class="tile-icon">📋</div>
+                <div class="tile-title">Briefings</div>
             </div>
         </main>
     </div>
 
-    <!-- SECURITY GATE PASSCODE MODAL -->
-    <div class="admin-modal hidden" id="auth-panel">
-        <div class="auth-box">
-            <div class="auth-header">
-                <h3><span class="material-icons-outlined">lock</span> Admin Verification</h3>
-                <span class="material-icons-outlined close-btn" id="auth-close">close</span>
+    <!-- ========================================== -->
+    <!--          VIEW 2: GAMEPLAY SCREEN           -->
+    <!-- ========================================== -->
+    <div id="game-view" class="view hidden">
+        <header class="game-header">
+            <button id="game-back-btn" class="back-btn">⬅️ Exit</button>
+            <div class="game-stats">
+                <span class="stat-item">🏆 Score: <strong id="game-score">0</strong></span>
+                <span class="stat-item">⏱️ Time: <strong id="game-timer">20</strong>s</span>
             </div>
+        </header>
+
+        <main class="game-container">
+            <div class="scenario-box">
+                <p id="scenario-text">Loading training matrix scenario...</p>
+            </div>
+            <div id="options-container" class="options-grid">
+                <!-- Answer choice buttons dynamically generated here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!--        VIEW 3: TOP 10 HIGH SCORES          -->
+    <!-- ========================================== -->
+    <div id="highscore-view" class="view hidden">
+        <header class="app-header">
+            <h1>🏆 TARIFF TITANS LEADERBOARD</h1>
+        </header>
+        <main class="center-content">
+            <div class="leaderboard-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Score</th>
+                            <th>Date Achieved</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Scores will be dynamically injected here -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="highscore-back-btn" class="option-btn" style="margin-top: 20px; width: 100%; max-width: 300px;">Return to Dashboard</button>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!--       MODAL: SECURITY PIN PASSCODE         -->
+    <!-- ========================================== -->
+    <div id="auth-panel" class="modal-overlay hidden">
+        <div class="pin-modal">
+            <button id="auth-close" class="close-btn">×</button>
+            <h3>Admin Security Entry</h3>
             <div class="pin-display">
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
+                <span class="pin-dot"></span>
             </div>
             <div class="pin-grid">
                 <button class="pin-btn" data-value="1">1</button>
@@ -109,74 +113,77 @@
                 <button class="pin-btn" data-value="7">7</button>
                 <button class="pin-btn" data-value="8">8</button>
                 <button class="pin-btn" data-value="9">9</button>
-                <button class="pin-btn action-clear material-icons-outlined" id="pin-clear">backspace</button>
+                <button id="pin-clear" class="pin-btn action">⌫</button>
                 <button class="pin-btn" data-value="0">0</button>
-                <button class="pin-btn action-go material-icons-outlined" id="pin-submit">check</button>
+                <button id="pin-submit" class="pin-btn action">✓</button>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN PANEL MODAL OVERLAY -->
-    <div class="admin-modal hidden" id="admin-panel">
-        <div class="admin-box">
-            <div class="admin-header">
-                <h2><span class="material-icons-outlined">admin_panel_settings</span> Hub Administration</h2>
-                <span class="material-icons-outlined close-btn" id="admin-close">close</span>
-            </div>
-            
-            <div class="admin-layout">
-                <!-- Left Side: Creator Form -->
-                <div class="admin-form-side">
-                    <h3>Create New Scenario</h3>
-                    <div class="form-group">
-                        <label>Scenario Text</label>
-                        <textarea id="form-text" placeholder="e.g., Customer is looking for a balanced mid-tier plan..."></textarea>
+    <!-- ========================================== -->
+    <!--         MODAL: CONTROLLER SETTINGS         -->
+    <!-- ========================================== -->
+    <div id="admin-panel" class="modal-overlay hidden">
+        <div class="admin-container">
+            <header class="admin-header">
+                <h2>Matrix Config Manager</h2>
+                <button id="admin-close" class="close-btn">×</button>
+            </header>
+
+            <div class="admin-body">
+                <!-- Creator Form Module -->
+                <section class="admin-section form-card">
+                    <h3>Add / Edit Scenario Block</h3>
+                    <div class="input-group">
+                        <label>Scenario / Question Description Prompt</label>
+                        <textarea id="form-text" placeholder="Type retail query or scenario criteria details here..."></textarea>
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
+                    <div class="form-grid-2x2">
+                        <div class="input-sub">
                             <label>Option A</label>
-                            <input type="text" id="form-optA" placeholder="e.g., £12.00/mo">
+                            <input type="text" id="form-optA" placeholder="Answer Choice A">
                         </div>
-                        <div class="form-group">
+                        <div class="input-sub">
                             <label>Option B</label>
-                            <input type="text" id="form-optB" placeholder="e.g., £29.99/mo">
+                            <input type="text" id="form-optB" placeholder="Answer Choice B">
                         </div>
-                        <div class="form-group">
+                        <div class="input-sub">
                             <label>Option C</label>
-                            <input type="text" id="form-optC" placeholder="e.g., £38.49/mo">
+                            <input type="text" id="form-optC" placeholder="Answer Choice C">
                         </div>
-                        <div class="form-group">
+                        <div class="input-sub">
                             <label>Option D</label>
-                            <input type="text" id="form-optD" placeholder="e.g., £39.99/mo">
+                            <input type="text" id="form-optD" placeholder="Answer Choice D">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Correct Answer Target</label>
+                    <div class="input-group select-wrapper">
+                        <label>Target Key Correct Identifier Mapping</label>
                         <select id="form-correct">
-                            <option value="">-- Select Correct Option --</option>
+                            <option value="" disabled selected>Select Correct Answer Variable Option</option>
                             <option value="A">Option A</option>
                             <option value="B">Option B</option>
                             <option value="C">Option C</option>
                             <option value="D">Option D</option>
                         </select>
                     </div>
-                    <button class="admin-btn action" id="add-scenario-btn"><span class="material-icons-outlined">add</span> Add to Master List</button>
-                    
-                    <hr class="admin-divider">
-                    
-                    <h3>Generate Data File</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: -5px;">Copy this text into your questions.json file on GitHub:</p>
-                    <textarea id="json-output" readonly placeholder="Your generated data file string will appear here..."></textarea>
-                    <button class="admin-btn copy" id="copy-json-btn"><span class="material-icons-outlined">content_copy</span> Copy JSON Code</button>
-                </div>
+                    <button id="add-scenario-btn" class="action-btn-primary">⚡ COMMIT SCENARIO ELEMENT</button>
+                </section>
 
-                <!-- Right Side: Live Active Toggles List -->
-                <div class="admin-list-side">
-                    <h3>Master Question Bank (<span id="question-count">0</span>)</h3>
-                    <div class="scenarios-list" id="scenarios-list-container">
-                        <!-- Loaded questions with toggle buttons injected here -->
+                <!-- Configuration Overview Table List Feed Container -->
+                <section class="admin-section">
+                    <h3>Loaded Scenario Engine Metrics: (<span id="question-count">0</span> Active Items)</h3>
+                    <p class="help-text">💡 <em>Click a card's text to populate the form above for editing. Toggle visibility or use 🗑️ to delete.</em></p>
+                    <div id="scenarios-list-container" class="admin-feed-scroller">
+                        <!-- Admin items injected dynamically here -->
                     </div>
-                </div>
+                </section>
+
+                <!-- Developer JSON Compilation Export Array Pipeline Terminal Output Box -->
+                <section class="admin-section">
+                    <h3>JSON Compilation Array Build Matrix Output Terminal</h3>
+                    <textarea id="json-output" readonly placeholder="Compilation build yields layout strings here..."></textarea>
+                    <button id="copy-json-btn" class="action-btn-secondary">📋 COPY UPDATED JSON</button>
+                </section>
             </div>
         </div>
     </div>
