@@ -24,7 +24,7 @@
                 <div class="tile-title">Tariff Titans</div>
             </div>
 
-            <!-- High Scores Tile (Triggers Leaderboard) -->
+            <!-- High Scores Tile -->
             <div class="tile" id="highscore-trigger">
                 <div class="tile-icon">🏆</div>
                 <div class="tile-title">High Scores</div>
@@ -59,7 +59,7 @@
                 <p id="scenario-text">Loading training matrix scenario...</p>
             </div>
             <div id="options-container" class="options-grid">
-                <!-- Answer choice buttons dynamically generated here -->
+                <!-- Dynamic answer buttons -->
             </div>
         </main>
     </div>
@@ -68,25 +68,24 @@
     <!--        VIEW 3: TOP 10 HIGH SCORES          -->
     <!-- ========================================== -->
     <div id="highscore-view" class="view hidden">
-        <header class="app-header">
-            <h1>🏆 TARIFF TITANS LEADERBOARD</h1>
+        <header class="game-header">
+            <button id="highscore-back-btn" class="back-btn">⬅️ Dashboard</button>
         </header>
-        <main class="center-content">
-            <div class="leaderboard-container">
-                <table class="leaderboard-table">
+        <main class="center-content" style="padding-top: 10px;">
+            <div class="local-leaderboard-container">
+                <table class="local-leaderboard-table">
                     <thead>
                         <tr>
                             <th>Rank</th>
                             <th>Score</th>
-                            <th>Date Achieved</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body">
-                        <!-- Scores will be dynamically injected here -->
+                        <!-- Scores dynamically injected here -->
                     </tbody>
                 </table>
             </div>
-            <button id="highscore-back-btn" class="option-btn" style="margin-top: 20px; width: 100%; max-width: 300px;">Return to Dashboard</button>
         </main>
     </div>
 
@@ -131,33 +130,20 @@
             </header>
 
             <div class="admin-body">
-                <!-- Creator Form Module -->
                 <section class="admin-section form-card">
                     <h3>Add / Edit Scenario Block</h3>
                     <div class="input-group">
-                        <label>Scenario / Question Description Prompt</label>
-                        <textarea id="form-text" placeholder="Type retail query or scenario criteria details here..."></textarea>
+                        <label>Scenario Description Prompt</label>
+                        <textarea id="form-text" placeholder="Type retail query here..."></textarea>
                     </div>
                     <div class="form-grid-2x2">
-                        <div class="input-sub">
-                            <label>Option A</label>
-                            <input type="text" id="form-optA" placeholder="Answer Choice A">
-                        </div>
-                        <div class="input-sub">
-                            <label>Option B</label>
-                            <input type="text" id="form-optB" placeholder="Answer Choice B">
-                        </div>
-                        <div class="input-sub">
-                            <label>Option C</label>
-                            <input type="text" id="form-optC" placeholder="Answer Choice C">
-                        </div>
-                        <div class="input-sub">
-                            <label>Option D</label>
-                            <input type="text" id="form-optD" placeholder="Answer Choice D">
-                        </div>
+                        <div class="input-sub"><label>Option A</label><input type="text" id="form-optA"></div>
+                        <div class="input-sub"><label>Option B</label><input type="text" id="form-optB"></div>
+                        <div class="input-sub"><label>Option C</label><input type="text" id="form-optC"></div>
+                        <div class="input-sub"><label>Option D</label><input type="text" id="form-optD"></div>
                     </div>
                     <div class="input-group select-wrapper">
-                        <label>Target Key Correct Identifier Mapping</label>
+                        <label>Target Key Correct Identifier</label>
                         <select id="form-correct">
                             <option value="" disabled selected>Select Correct Answer Variable Option</option>
                             <option value="A">Option A</option>
@@ -169,24 +155,61 @@
                     <button id="add-scenario-btn" class="action-btn-primary">⚡ COMMIT SCENARIO ELEMENT</button>
                 </section>
 
-                <!-- Configuration Overview Table List Feed Container -->
                 <section class="admin-section">
-                    <h3>Loaded Scenario Engine Metrics: (<span id="question-count">0</span> Active Items)</h3>
-                    <p class="help-text">💡 <em>Click a card's text to populate the form above for editing. Toggle visibility or use 🗑️ to delete.</em></p>
-                    <div id="scenarios-list-container" class="admin-feed-scroller">
-                        <!-- Admin items injected dynamically here -->
-                    </div>
+                    <h3>Loaded Scenarios: (<span id="question-count">0</span> Items)</h3>
+                    <div id="scenarios-list-container" class="admin-feed-scroller"></div>
                 </section>
 
-                <!-- Developer JSON Compilation Export Array Pipeline Terminal Output Box -->
                 <section class="admin-section">
-                    <h3>JSON Compilation Array Build Matrix Output Terminal</h3>
-                    <textarea id="json-output" readonly placeholder="Compilation build yields layout strings here..."></textarea>
+                    <h3>JSON Output</h3>
+                    <textarea id="json-output" readonly></textarea>
                     <button id="copy-json-btn" class="action-btn-secondary">📋 COPY UPDATED JSON</button>
                 </section>
             </div>
         </div>
     </div>
+
+    <!-- ========================================== -->
+    <!--  ISOLATED INLINE STYLES FOR LEADERBOARD    -->
+    <!-- ========================================== -->
+    <style>
+        .local-leaderboard-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .local-leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .local-leaderboard-table th, 
+        .local-leaderboard-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .local-leaderboard-table th {
+            color: #ff3366;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        .local-leaderboard-table td {
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+        .local-leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+        .local-leaderboard-table tr:nth-child(1) td { color: #ffd700; font-weight: 700; } 
+        .local-leaderboard-table tr:nth-child(2) td { color: #c0c0c0; font-weight: 700; } 
+        .local-leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+    </style>
 
     <script src="script.js"></script>
 </body>
