@@ -29,7 +29,7 @@ body {
 
 .view-container {
     width: 100%;
-    max-width: 1200px; /* Wider view bounds to perfectly format grid cards on landscape layout */
+    max-width: 1200px; 
     margin: 0 auto;
     padding: 24px;
     height: 100vh;
