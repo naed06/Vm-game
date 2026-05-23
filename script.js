@@ -68,7 +68,7 @@ async function loadQuestionsFromFile() {
         masterScenarios = [
             {
                 text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage. What is the lowest airtime price point?",
-                options: ["£29.99/mo", "£12.00/mo", "£39.99/mo", "£15.00/mo"],
+                options: ["£12.00/mo", "£15.00/mo", "£29.99/mo", "£39.99/mo"],
                 correct: "£12.00/mo",
                 active: true
             }
@@ -93,7 +93,6 @@ authClose.addEventListener('click', () => {
     authPanel.classList.add('hidden');
 });
 
-// Capture keypad presses
 pinButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         if (enteredPinBuffer.length < 4) {
@@ -170,22 +169,60 @@ function updateAdminPanelList() {
     masterScenarios.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
+        card.style.cursor = 'pointer'; // Visual cue that the card is clickable for editing
         
         card.innerHTML = `
-            <div class="admin-item-info">
-                <p>${item.text}</p>
+            <div class="admin-item-info" data-index="${index}">
+                <p><strong>#${index + 1}:</strong> ${item.text}</p>
                 <div class="admin-item-meta">Ans: <strong>${item.correct}</strong></div>
             </div>
-            <label class="switch-control">
-                <input type="checkbox" ${item.active ? 'checked' : ''} data-index="${index}">
-                <span class="switch-slider"></span>
-            </label>
+            <div class="admin-actions-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch-control">
+                    <input type="checkbox" ${item.active ? 'checked' : ''} data-toggle-index="${index}">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="delete-scenario-btn" data-delete-index="${index}" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 4px;">🗑️</button>
+            </div>
         `;
         
-        card.querySelector('input').addEventListener('change', (e) => {
-            const idx = parseInt(e.target.getAttribute('data-index'));
+        // 1. CLICK TO EDIT: Populates the text input boxes above
+        card.querySelector('.admin-item-info').addEventListener('click', (e) => {
+            const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+            const targetScenario = masterScenarios[idx];
+            
+            formText.value = targetScenario.text;
+            formOptA.value = targetScenario.options[0] || '';
+            formOptB.value = targetScenario.options[1] || '';
+            formOptC.value = targetScenario.options[2] || '';
+            formOptD.value = targetScenario.options[3] || '';
+            
+            // Map the text back to selection indexes
+            if (targetScenario.correct === targetScenario.options[0]) formCorrect.value = "A";
+            else if (targetScenario.correct === targetScenario.options[1]) formCorrect.value = "B";
+            else if (targetScenario.correct === targetScenario.options[2]) formCorrect.value = "C";
+            else if (targetScenario.correct === targetScenario.options[3]) formCorrect.value = "D";
+            else formCorrect.value = "";
+            
+            // Scroll to the top input container inside the modal smoothly
+            adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 2. TOGGLE ON/OFF
+        card.querySelector('input[data-toggle-index]').addEventListener('change', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-toggle-index'));
             masterScenarios[idx].active = e.target.checked;
             updateAdminPanelList();
+        });
+
+        // 3. REMOVE/DELETE QUESTION
+        card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
+            e.stopPropagation(); // Stops the element from triggering click-to-edit
+            const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
+            
+            if (confirm(`Are you sure you want to permanently delete Question #${idx + 1}?`)) {
+                masterScenarios.splice(idx, 1);
+                updateAdminPanelList();
+            }
         });
 
         scenariosListContainer.appendChild(card);
@@ -233,10 +270,11 @@ addScenarioBtn.addEventListener('click', () => {
 });
 
 // Copy JSON Clipboard Tool System Hook Engine Element
+copyJsonBtn.innerText = "📋 COPY UPDATED JSON";
 copyJsonBtn.addEventListener('click', () => {
     jsonOutput.select();
     document.execCommand('copy');
-    alert("Configurations copied successfully to clipboard! Update questions.json on GitHub.");
+    alert("Configurations copied successfully to clipboard! Update questions.json on GitHub to sync devices.");
 });
 
 // GAMEPLAY SIMULATOR RUNTIME CONTROLLER
