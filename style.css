@@ -1,10 +1,133 @@
+:root {
+    --bg-dark: #0f0a1a;
+    --bg-accent: #2d1a45;
+    --vm-red: #e21b23;
+    --text-white: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.4);
+    --tile-bg: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100dvh;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at 30% 30%, #3a1f5d 0%, #0f0a1a 100%);
+    color: var(--text-white);
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- THE LOGO BACKGROUND --- */
+.background-watermark {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85vw; height: 85vh;
+    background-image: url('logo.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.15; 
+    z-index: 0;
+    pointer-events: none;
+}
+
+.main-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    height: 100dvh; width: 100vw;
+}
+
+/* --- UI ELEMENTS --- */
+.header { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+.header-spacer { width: 24px; } 
+
+.nav-links { display: flex; gap: 30px; }
+.nav-item { text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; font-size: 11px; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.nav-item.active { color: var(--text-white); border-bottom: 3px solid var(--vm-red); padding-bottom: 5px; }
+
+.content-area { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 40px 30px 40px; }
+.hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.hero-title { font-size: clamp(3rem, 12vh, 6rem); font-weight: 800; margin: 0; text-transform: lowercase; }
+#hero-desc { color: var(--text-dim); margin: 5px 0 0 0; font-size: 1.1rem; }
+
+.shelf { flex-shrink: 0; }
+.tile-row { display: flex; gap: 15px; height: 32vh; max-height: 180px; }
+.tile { flex: 1; background: var(--tile-bg); border: 2px solid transparent; border-radius: 12px; position: relative; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+.tile.focused { border-color: white; background: rgba(255,255,255,0.12); transform: scale(1.02); }
+.tile-icon { font-size: 45px; color: var(--text-dim); }
+.tile.focused .tile-icon { color: var(--vm-red); }
+.tile-label { position: absolute; bottom: 12px; left: 15px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
+
+/* --- GAME HUB ENGINE STYLES --- */
+.hidden { display: none !important; }
+.game-container { display: flex; flex-direction: column; height: 100%; width: 100%; }
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-white);
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase;
+    font-size: 0.8rem; display: flex; align-items: center; gap: 8px; transition: background 0.2s;
+}
+.back-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+.game-stats { display: flex; gap: 15px; }
+.stat-box { background: rgba(15, 10, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 6px; font-weight: 800; letter-spacing: 1px; }
+.game-play-area { flex: 1; display: flex; gap: 20px; align-items: stretch; }
+
+.scenario-card { flex: 1; background: rgba(255, 255, 255, 0.05); border-left: 5px solid var(--vm-red); border-radius: 12px; padding: 25px; display: flex; flex-direction: column; justify-content: center; }
+.scenario-card h3 { margin: 0 0 10px 0; text-transform: uppercase; color: var(--text-dim); font-size: 0.9rem; letter-spacing: 1px; }
+.scenario-card p { margin: 0; font-size: 1.4rem; line-height: 1.5; font-weight: 600; }
+
+.options-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.option-btn {
+    background: var(--tile-bg); border: 2px solid transparent; border-radius: 12px; color: var(--text-white);
+    font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center;
+    padding: 20px; text-align: center; transition: all 0.2s;
+}
+.option-btn:hover { border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.12); }
+.option-btn.correct { background: #2e7d32 !important; border-color: #4caf50 !important; }
+.option-btn.wrong { background: #c62828 !important; border-color: #f44336 !important; }
+
+/* --- THE ROTATION ENGINE FIXED --- */
+#rotate-message { 
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: var(--bg-dark); 
+    z-index: 99999; 
+    text-align: center; 
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column; 
+}
+
+@media (max-width: 767px) and (orientation: portrait) { 
+    #rotate-message { display: flex; } 
+}
+
+.phone-icon { font-size: 80px; color: var(--text-white); margin-bottom: 20px; animation: rotate-me 2s infinite; }
+@keyframes rotate-me { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
+
+/* Mobile landscape view tweaks */
+@media (max-height: 450px) and (orientation: landscape) {
+    .header { height: 50px; padding: 0 20px; }
+    .hero-title { font-size: 2.2rem; }
+    #hero-desc { display: none; }
+    .tile-row { height: 48vh; gap: 10px; }
+    .scenario-card p { font-size: 1.1rem; }
+    .option-btn { font-size: 0.9rem; padding: 10px; }
+}
+
 /* --- ADMIN PANEL MODAL ENGINE --- */
 .admin-modal {
     position: fixed; inset: 0;
-    background: rgba(15, 10, 26, 0.9);
+    background: rgba(15, 10, 26, 0.95);
     z-index: 10000; display: flex;
     justify-content: center; align-items: center;
-    padding: 20px;
+    padding: 15px;
 }
 .admin-box {
     background: #1c142e; border: 2px solid var(--bg-accent);
@@ -18,7 +141,7 @@
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .admin-header h2 { margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; color: var(--text-white); }
-.close-btn { cursor: pointer; color: var(--text-dim); transition: color 0.2s; }
+.close-btn { cursor: pointer; color: var(--text-dim); transition: color 0.2s; font-size: 24px; }
 .close-btn:hover { color: var(--vm-red); }
 
 .admin-layout { flex: 1; display: flex; overflow: hidden; }
@@ -52,12 +175,12 @@
     background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px;
 }
-.admin-item-card.disabled { opacity: 0.4; border-color: transparent; }
+.admin-item-card.disabled { opacity: 0.3; border-color: transparent; }
 .admin-item-info { flex: 1; min-width: 0; }
 .admin-item-info p { margin: 0; font-size: 0.85rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-item-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 3px; }
 
-/* Elegant Custom Switch Component */
+/* Custom Switch Toggle Component */
 .switch-control {
     position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0;
 }
@@ -72,3 +195,25 @@
 }
 input:checked + .switch-slider { background-color: #2e7d32; border-color: #4caf50; }
 input:checked + .switch-slider:before { transform: translateX(20px); }
+
+/* --- MOBILE LANDSCAPE RESPONSIVE FIX (From 7274.jpg Analysis) --- */
+@media (max-width: 950px) {
+    .admin-box {
+        height: 92vh;
+        width: 95vw;
+    }
+    .admin-layout {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .admin-form-side, .admin-list-side {
+        width: 100%;
+        overflow-y: visible;
+        border-right: none;
+        padding: 15px 20px;
+    }
+    .admin-list-side {
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0,0,0,0.2);
+    }
+}
