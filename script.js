@@ -2,6 +2,10 @@
 const dashboardView = document.getElementById('dashboard-view');
 const gameView = document.getElementById('game-view');
 const backBtn = document.getElementById('game-back-btn');
+const highscoreView = document.getElementById('highscore-view');
+const highscoreTrigger = document.getElementById('highscore-trigger');
+const highscoreBackBtn = document.getElementById('highscore-back-btn');
+const leaderboardBody = document.getElementById('leaderboard-body');
 
 // Gameplay DOM Hook Elements
 const scenarioText = document.getElementById('scenario-text');
@@ -92,6 +96,70 @@ function compileActiveQuizScenarios() {
     activeScenarios = shuffleArray([...filtered]); 
 }
 
+/* --- LOCAL STORAGE LEADERBOARD ENGINE --- */
+function saveHighScore(finalScore) {
+    // Retrieve existing leaderboard or initialize empty array
+    let scoresLog = JSON.parse(localStorage.getItem('tariff_titans_highscores')) || [];
+    
+    // Create clean date signature structure (DD/MM/YYYY)
+    const now = new Date();
+    const dateString = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+    
+    // Push new payload profile entry
+    scoresLog.push({ score: finalScore, date: dateString });
+    
+    // Sort descending (highest score first)
+    scoresLog.sort((a, b) => b.score - a.score);
+    
+    // Truncate list strictly down to top 10 positions
+    scoresLog = scoresLog.slice(0, 10);
+    
+    localStorage.setItem('tariff_titans_highscores', JSON.stringify(scoresLog));
+}
+
+function renderHighScores() {
+    if (!leaderboardBody) return;
+    leaderboardBody.innerHTML = '';
+    
+    const scoresLog = JSON.parse(localStorage.getItem('tariff_titans_highscores')) || [];
+    
+    if (scoresLog.length === 0) {
+        leaderboardBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:rgba(255,255,255,0.4); padding: 20px;">No records tracked yet. Set a high score!</td></tr>`;
+        return;
+    }
+    
+    scoresLog.forEach((entry, idx) => {
+        const row = document.createElement('tr');
+        let rankBadge = `#${idx + 1}`;
+        if (idx === 0) rankBadge = "🥇 1st";
+        if (idx === 1) rankBadge = "🥈 2nd";
+        if (idx === 2) rankBadge = "🥉 3rd";
+
+        row.innerHTML = `
+            <td>${rankBadge}</td>
+            <td><strong>${entry.score} pts</strong></td>
+            <td>${entry.date}</td>
+        `;
+        leaderboardBody.appendChild(row);
+    });
+}
+
+// Leaderboard View Navigation Handlers
+if (highscoreTrigger) {
+    highscoreTrigger.addEventListener('click', () => {
+        renderHighScores();
+        dashboardView.classList.add('hidden');
+        highscoreView.classList.remove('hidden');
+    });
+}
+
+if (highscoreBackBtn) {
+    highscoreBackBtn.addEventListener('click', () => {
+        highscoreView.classList.add('hidden');
+        dashboardView.classList.remove('hidden');
+    });
+}
+
 /* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
 if (adminTrigger) {
     adminTrigger.addEventListener('click', () => {
@@ -180,7 +248,7 @@ function updateAdminPanelList() {
     masterScenarios.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
-        card.style.cursor = 'pointer';
+        card.style.cursor = 'pointer'; // Visual cue that the card is clickable for editing
         
         card.innerHTML = `
             <div class="admin-item-info" data-index="${index}">
@@ -196,7 +264,7 @@ function updateAdminPanelList() {
             </div>
         `;
         
-        // CLICK TO EDIT
+        // 1. CLICK TO EDIT: Populates the text input boxes above
         card.querySelector('.admin-item-info').addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
             const targetScenario = masterScenarios[idx];
@@ -207,25 +275,27 @@ function updateAdminPanelList() {
             formOptC.value = targetScenario.options[2] || '';
             formOptD.value = targetScenario.options[3] || '';
             
+            // Map the text back to selection indexes
             if (targetScenario.correct === targetScenario.options[0]) formCorrect.value = "A";
             else if (targetScenario.correct === targetScenario.options[1]) formCorrect.value = "B";
             else if (targetScenario.correct === targetScenario.options[2]) formCorrect.value = "C";
             else if (targetScenario.correct === targetScenario.options[3]) formCorrect.value = "D";
             else formCorrect.value = "";
             
+            // Scroll to the top input container inside the modal smoothly
             adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // TOGGLE ON/OFF
+        // 2. TOGGLE ON/OFF
         card.querySelector('input[data-toggle-index]').addEventListener('change', (e) => {
             const idx = parseInt(e.target.getAttribute('data-toggle-index'));
             masterScenarios[idx].active = e.target.checked;
             updateAdminPanelList();
         });
 
-        // REMOVE/DELETE QUESTION
+        // 3. REMOVE/DELETE QUESTION
         card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
-            e.stopPropagation(); 
+            e.stopPropagation(); // Stops the element from triggering click-to-edit
             const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
             
             if (confirm(`Are you sure you want to permanently delete Question #${idx + 1}?`)) {
@@ -359,6 +429,9 @@ function nextScenario() {
     if (currentScenarioIndex < activeScenarios.length) {
         loadScenario();
     } else {
+        // Save the score right when the run concludes!
+        saveHighScore(score);
+        
         if (scenarioText) scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
         if (optionsContainer) {
             optionsContainer.innerHTML = '';
