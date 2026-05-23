@@ -3,42 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Challenge Hub</title>
+    <title>Sales Sprint Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- 1. DASHBOARD VIEW -->
     <div id="dashboard-view" class="view-container">
-        <header class="app-header">
-            <h1>CHALLENGE PORTAL</h1>
-            <button id="settings-trigger" class="icon-btn">⚙️ Settings</button>
+        <!-- Top Navigation Bar matching screenshot -->
+        <header class="app-navigation">
+            <div class="nav-brand">VM-GAME</div>
+            <nav class="nav-links">
+                <a href="#" class="nav-item active"><span class="nav-icon">🏠</span> HOME</a>
+                <a href="#" class="nav-item"><span class="nav-icon">⣿</span> APPS</a>
+                <a href="#" class="nav-item"><span class="nav-icon">🎮</span> GAMES</a>
+                <a href="#" class="nav-item"><span class="nav-icon">📊</span> LEADERBOARD</a>
+            </nav>
+            <button id="settings-trigger" class="settings-btn">⚙️</button>
         </header>
 
-        <main class="grid-layout">
-            <!-- Active Game Trigger Tile -->
+        <!-- Main Dashboard Header Content -->
+        <div class="dashboard-header-text">
+            <h1>sales sprint</h1>
+            <p>Open Dashboard</p>
+        </div>
+
+        <!-- Four-Column Horizontal Row Grid Layout -->
+        <main class="horizontal-grid">
+            <!-- Tariff Titan (Game Active Trigger) -->
             <div id="tile-titan" class="tile focused">
-                <div class="tile-content">
-                    <span class="tile-icon">⚡</span>
-                    <h2>Tile Titan</h2>
-                    <p>Start the knowledge challenge</p>
+                <div class="tile-body">
+                    <!-- Custom SVG red star matching the image precisely -->
+                    <svg class="tile-center-icon red-star" viewBox="0 0 24 24" width="48" height="48">
+                        <circle cx="12" cy="12" r="10" fill="none" stroke="#e60000" stroke-width="2"/>
+                        <polygon points="12,7.5 13.8,11.2 17.9,11.8 14.9,14.7 15.6,18.8 12,16.9 8.4,18.8 9.1,14.7 6.1,11.8 10.2,11.2" fill="#e60000"/>
+                    </svg>
                 </div>
+                <div class="tile-footer">TARIFF TITAN</div>
             </div>
 
-            <!-- Decorative Mock Tiles to match the layout -->
+            <!-- Broadband Tile -->
             <div class="tile">
-                <div class="tile-content">
-                    <span class="tile-icon">📊</span>
-                    <h2>Leaderboard</h2>
-                    <p>View top performance rankings</p>
+                <div class="tile-body">
+                    <span class="tile-center-icon plain-icon">📶</span>
                 </div>
+                <div class="tile-footer">BROADBAND</div>
             </div>
+
+            <!-- Scores Tile -->
             <div class="tile">
-                <div class="tile-content">
-                    <span class="tile-icon">🏆</span>
-                    <h2>Incentives</h2>
-                    <p>Check active targets</p>
+                <div class="tile-body">
+                    <span class="tile-center-icon plain-icon">👥</span>
                 </div>
+                <div class="tile-footer">SCORES</div>
+            </div>
+
+            <!-- Incentives Tile -->
+            <div class="tile">
+                <div class="tile-body">
+                    <span class="tile-center-icon plain-icon">🏆</span>
+                </div>
+                <div class="tile-footer">INCENTIVES</div>
             </div>
         </main>
     </div>
@@ -99,16 +124,15 @@
     <div id="admin-panel" class="modal-overlay hidden">
         <div class="admin-container">
             <header class="admin-header">
-                <h2>Control Configuration Panel (<span id="question-count">0</span>)</h2>
+                <h2>Control Panel Configuration (<span id="question-count">0</span>)</h2>
                 <button id="admin-close" class="close-btn">&times;</button>
             </header>
 
-            <!-- Creation/Edition Form Interface -->
             <section class="admin-form-section">
                 <h3>Scenario Properties Builder</h3>
                 <div class="form-group">
                     <label>Scenario Prompt / Question text:</label>
-                    <input type="text" id="form-text" placeholder="Enter customer interaction scenario details...">
+                    <input type="text" id="form-text" placeholder="Enter scenario details...">
                 </div>
                 <div class="options-inputs-group">
                     <div class="form-group"><label>Option A:</label><input type="text" id="form-optA"></div>
@@ -117,7 +141,7 @@
                     <div class="form-group"><label>Option D:</label><input type="text" id="form-optD"></div>
                 </div>
                 <div class="form-group">
-                    <label>Designated Correct Key Signature Answer:</label>
+                    <label>Designated Correct Key Answer:</label>
                     <select id="form-correct">
                         <option value="">-- Choose Key --</option>
                         <option value="A">Option A</option>
@@ -129,15 +153,13 @@
                 <button id="add-scenario-btn" class="primary-btn">➕ COMMIT DATA TO SCENARIO STREAM</button>
             </section>
 
-            <!-- Active Scenarios Management Registry List -->
             <section class="admin-list-section">
                 <h3>Active Deployment Track</h3>
                 <div id="scenarios-list-container" class="admin-scenarios-list">
-                    <!-- Dynamic Management Registry Cards go here -->
+                    <!-- Admin entries will dynamically render here -->
                 </div>
             </section>
 
-            <!-- JSON Synchronization Hub Pipeline Output Area -->
             <section class="admin-sync-section">
                 <h3>Global Synchronization Core File Pipeline</h3>
                 <textarea id="json-output" readonly></textarea>
