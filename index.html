@@ -9,6 +9,7 @@
 </head>
 <body>
 
+    <!-- Rotation Overlay -->
     <div id="rotate-message">
         <div class="message-content">
             <div class="phone-icon material-icons-outlined">screen_rotation</div>
@@ -17,6 +18,7 @@
         </div>
     </div>
 
+    <!-- The Full-Color Logo Background Layer -->
     <div class="background-watermark"></div>
 
     <div class="main-container">
@@ -28,9 +30,10 @@
                 <div class="nav-item"><span class="material-icons-outlined">sports_esports</span> GAMES</div>
                 <div class="nav-item"><span class="material-icons-outlined">leaderboard</span> LEADERBOARD</div>
             </nav>
-            <div class="settings-btn material-icons-outlined" id="settings-trigger">settings</div>
+            <div class="settings-btn material-icons-outlined" id="settings-trigger" style="cursor: pointer;">settings</div>
         </header>
 
+        <!-- MAIN DASHBOARD VIEW -->
         <main class="content-area" id="dashboard-view">
             <section class="hero">
                 <h1 class="hero-title">sales sprint</h1>
@@ -59,6 +62,7 @@
             </section>
         </main>
 
+        <!-- TARIFF TITAN GAME SCREEN VIEW -->
         <main class="content-area hidden" id="game-view">
             <div class="game-container">
                 <div class="game-header">
@@ -75,10 +79,76 @@
                         <p id="scenario-text">Loading up your first customer challenge...</p>
                     </div>
                     <div class="options-grid" id="options-container">
-                        </div>
+                        <!-- Options generated dynamically via JS -->
+                    </div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- ADMIN PANEL MODAL OVERLAY -->
+    <div class="admin-modal hidden" id="admin-panel">
+        <div class="admin-box">
+            <div class="admin-header">
+                <h2><span class="material-icons-outlined">admin_panel_settings</span> Hub Administration</h2>
+                <span class="material-icons-outlined close-btn" id="admin-close">close</span>
+            </div>
+            
+            <div class="admin-layout">
+                <!-- Left Side: Creator Form -->
+                <div class="admin-form-side">
+                    <h3>Create New Scenario</h3>
+                    <div class="form-group">
+                        <label>Scenario Text</label>
+                        <textarea id="form-text" placeholder="e.g., Customer is looking for a balanced mid-tier plan..."></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Option A</label>
+                            <input type="text" id="form-optA" placeholder="e.g., £12.00/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option B</label>
+                            <input type="text" id="form-optB" placeholder="e.g., £29.99/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option C</label>
+                            <input type="text" id="form-optC" placeholder="e.g., £38.49/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option D</label>
+                            <input type="text" id="form-optD" placeholder="e.g., £39.99/mo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Correct Answer Target</label>
+                        <select id="form-correct">
+                            <option value="">-- Select Correct Option --</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                    <button class="admin-btn action" id="add-scenario-btn"><span class="material-icons-outlined">add</span> Add to Master List</button>
+                    
+                    <hr class="admin-divider">
+                    
+                    <h3>Generate Data File</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: -5px;">Copy this exact text structure into your questions.json file on GitHub:</p>
+                    <textarea id="json-output" readonly placeholder="Your generated data file string will appear here..."></textarea>
+                    <button class="admin-btn copy" id="copy-json-btn"><span class="material-icons-outlined">content_copy</span> Copy JSON Code</button>
+                </div>
+
+                <!-- Right Side: Live Active Toggles List -->
+                <div class="admin-list-side">
+                    <h3>Master Question Bank (<span id="question-count">0</span>)</h3>
+                    <div class="scenarios-list" id="scenarios-list-container">
+                        <!-- Loaded questions with toggle buttons injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
