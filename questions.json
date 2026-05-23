@@ -1,0 +1,222 @@
+[
+    {
+        "text": "A customer wants over 200 TV channels (including Sky Atlantic) alongside M350 broadband and Netflix Standard with Ads. Which bundle fits this exact description for £32.99 a month?",
+        "options": [
+            "Cinema M350 + Netflix",
+            "Entertainment M350 + Netflix",
+            "Sport M350 + Netflix",
+            "Max Volt Gig1"
+        ],
+        "correct": "Entertainment M350 + Netflix",
+        "active": true
+    },
+    {
+        "text": "You are talking to an existing O2 customer on the Entertainment M350 + Netflix bundle. They want to upgrade their broadband speed to M500. How much extra per month will this cost them?",
+        "options": [
+            "£2 per month",
+            "£4 per month",
+            "£6 per month",
+            "£8 per month"
+        ],
+        "correct": "£4 per month",
+        "active": true
+    },
+    {
+        "text": "A customer looking at the TV bundle offers asks how many channels they will get if they sign up for the Sport M350 + Netflix bundle. What is the correct answer?",
+        "options": [
+            "180+ TV Channels",
+            "195+ TV Channels",
+            "200+ TV Channels",
+            "210+ TV Channels"
+        ],
+        "correct": "195+ TV Channels",
+        "active": true
+    },
+    {
+        "text": "A customer has chosen the Cinema M350 + Netflix TV bundle but is on the fence about adding Sky Sports. What is the exact weekly cost to swap Cinema for Sports in HD?",
+        "options": [
+            "An additional £1.38 per week",
+            "An additional £1.61 per week",
+            "An additional £2.30 per week",
+            "An additional £2.76 per week"
+        ],
+        "correct": "An additional £2.30 per week",
+        "active": true
+    },
+    {
+        "text": "A customer wants a comprehensive package that includes both Sky Sports and Sky Cinema in HD, over 210 TV channels, Netflix Standard with Ads, and M500 broadband for £64.99/month. What is the name of this bundle?",
+        "options": [
+            "Entertainment M350 + Netflix",
+            "Sport M350 + Netflix",
+            "Cinema M350 + Netflix",
+            "Sport + Cinema M500 + Netflix"
+        ],
+        "correct": "Sport + Cinema M500 + Netflix",
+        "active": true
+    },
+    {
+        "text": "A customer on the Sport + Cinema M500 + Netflix bundle (£64.99/month) wants to maximize their internet speed. According to the TV bundle upsell paths, how much more does it cost to upgrade to Gig1?",
+        "options": [
+            "£2 more per month",
+            "£4 more per month",
+            "£5 more per month",
+            "£7 more per month"
+        ],
+        "correct": "£4 more per month",
+        "active": true
+    },
+    {
+        "text": "A customer is reviewing the Entertainment M350 + Netflix bundle. They want to know what hardware is included to power their television experience. Which device should you tell them they will receive?",
+        "options": [
+            "Virgin TV 360 Box",
+            "Virgin TV Stream Box",
+            "Virgin Media V6 Box",
+            "TiVo Box"
+        ],
+        "correct": "Virgin TV Stream Box",
+        "active": true
+    },
+    {
+        "text": "A customer wants to include the Kids TV Add-on to their package. How many extra channels (such as Nickelodeon and Cartoon Network) does this add, and how much does it cost?",
+        "options": [
+            "10 channels for £4 per month",
+            "12 channels for £6 per month",
+            "13 channels for £5 per month",
+            "15 channels for £12 per month"
+        ],
+        "correct": "13 channels for £5 per month",
+        "active": true
+    },
+    {
+        "text": "A customer is interested in upgrading their Sky content to Ultra High Definition. What is the name of the add-on they need, and what is its monthly cost?",
+        "options": [
+            "Sky Cinema Add-on for £7 per month",
+            "Sky UHD Add-on for £7 per month",
+            "Sky HD Premium Add-on for £8 per month",
+            "Asian Mela Add-on for £12 per month"
+        ],
+        "correct": "Sky UHD Add-on for £7 per month",
+        "active": true
+    },
+    {
+        "text": "You are pitch-matching everyday expenses to show the value of a TV package. For a customer who wants 200+ channels (including Sky Atlantic), a broadband boost to Gig1, and Netflix included, which daily expense is this compared to?",
+        "options": [
+            "Less than the cost of a loaf of bread (19p a day)",
+            "Less than the price of a takeaway coffee (42p a day)",
+            "Less than the cost of a bottle of water (26p a day)",
+            "Less than the price of a packet of crisps (72p a day)"
+        ],
+        "correct": "Less than the price of a takeaway coffee (42p a day)",
+        "active": true
+    },
+    {
+        "text": "An existing O2 mobile customer wants to bring their broadband over to Virgin Media. They are currently looking at the standalone Solus M250 package for £25.99/month. To practice 'dialing up the value', which upgrade path should you lead with?",
+        "options": [
+            "Step them down to the Solus Volt 350 for £22.99 a month",
+            "Lead with the Solus Volt Gig1 (boosted from M500) for £27.99 a month—a massive speed jump for just 46p more per week",
+            "Offer them the standard Solus M500 package without Netflix for £27.99 a month",
+            "Keep them on the Solus M250 and add a 10GB Volt SIM for an extra £6 a month"
+        ],
+        "correct": "Lead with the Solus Volt Gig1 (boosted from M500) for £27.99 a month—a massive speed jump for just 46p more per week",
+        "active": true
+    },
+    {
+        "text": "A customer is interested in switching to Virgin Media broadband but is worried about the early exit fees from their current provider. How much can they claim in Switching Credit under the extended offer?",
+        "options": [
+            "Up to £100 bill credit",
+            "Up to £150 bill credit",
+            "Up to £200 bill credit",
+            "Up to £250 bill credit"
+        ],
+        "correct": "Up to £250 bill credit",
+        "active": true
+    },
+    {
+        "text": "You are setting expectations with a new customer who is eligible for the Switching Credit offer. How many days from the activation of their Virgin Media services do they have to submit their final bill claim?",
+        "options": [
+            "30 days",
+            "45 days",
+            "60 days",
+            "90 days"
+        ],
+        "correct": "60 days",
+        "active": true
+    },
+    {
+        "text": "An existing O2 mobile customer is switching their broadband to Virgin Media. The sale is processed in Nexus. To ensure they get their Volt benefits automatically applied after installation, what critical action must you take?",
+        "options": [
+            "Submit a separate manual credit form on Ocasta",
+            "Switch on the 'Existing Customer' toggle and correctly enter their O2 account number and registered email address",
+            "Tell the customer to call O2 customer services within 48 hours of the sale",
+            "Nothing, Nexus automatically scans for matching names across both systems without agent inputs"
+        ],
+        "correct": "Switch on the 'Existing Customer' toggle and correctly enter their O2 account number and registered email address",
+        "active": true
+    },
+    {
+        "text": "A customer wants the 'Entertainment Bundle' containing over 200 TV channels (including Sky Atlantic), Netflix Standard with Ads, and 362Mbps broadband. What is the standard promo price for this package?",
+        "options": [
+            "£25.99 per month",
+            "£32.99 per month",
+            "£44.99 per month",
+            "£54.99 per month"
+        ],
+        "correct": "£32.99 per month",
+        "active": true
+    },
+    {
+        "text": "When auditing a final bill submitted by a customer for the Switching Credit offer, which pieces of information must be clearly visible on the document?",
+        "options": [
+            "Only the Early Disconnection Fee amount and the provider logo",
+            "Name, Address, and a clearly itemised final bill amount which includes the early disconnection fee",
+            "The account number and the contract start date",
+            "The customer's bank statement matching the payment to the old provider"
+        ],
+        "correct": "Name, Address, and a clearly itemised final bill amount which includes the early disconnection fee",
+        "active": true
+    },
+    {
+        "text": "A customer wants to take advantage of the 'Existing O2 Customer' exclusive offers on Solus Volt broadband. To verify eligibility in 360, how long must the customer have been an active O2 mobile user?",
+        "options": [
+            "At least 7 days",
+            "At least 15 days",
+            "At least 30 days",
+            "At least 90 days"
+        ],
+        "correct": "At least 15 days",
+        "active": true
+    },
+    {
+        "text": "A customer on a Solus M125 plan wants a speed boost. According to the upgrade metrics, how much extra per week does it cost to quadruple their speed to M500 and add Netflix Standard with Ads?",
+        "options": [
+            "46p extra per week",
+            "92p extra per week",
+            "£1.15 extra per week",
+            "£1.38 extra per week"
+        ],
+        "correct": "£1.38 extra per week",
+        "active": true
+    },
+    {
+        "text": "Which of the following contract/plan types is strictly EXCLUDED from claiming the up to £250 Switching Credit?",
+        "options": [
+            "Standard 24-month contracts",
+            "Essential Broadband, student contracts, MyRates, or rolling contracts",
+            "Full Fibre XGS PON bundles",
+            "Volt Converged broadband plans"
+        ],
+        "correct": "Essential Broadband, student contracts, MyRates, or rolling contracts",
+        "active": true
+    },
+    {
+        "text": "A customer looking at Volt SIMO options asks what 'Extra' benefit they get if they take the premium 'Ultimate' tier plan.",
+        "options": [
+            "A choice of an Extra from Disney+, Amazon, and more for 3 months",
+            "A choice of an Extra from Disney+, Amazon, and more for 6 months",
+            "A choice of an Extra from Disney+, Amazon, and more for the lifetime of the Ultimate Plan",
+            "They only receive standard O2 Priority access with no added subscription extras"
+        ],
+        "correct": "A choice of an Extra from Disney+, Amazon, and more for the lifetime of the Ultimate Plan",
+        "active": true
+    }
+]
