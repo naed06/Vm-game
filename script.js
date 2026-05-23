@@ -247,6 +247,7 @@ document.getElementById('tile-titan').addEventListener('click', async () => {
     compileActiveQuizScenarios(); 
     dashboardView.classList.add('hidden');
     gameView.classList.remove('hidden');
+    document.body.classList.add('quiz-active'); // Add layout tracking mode class
     startGame();
 });
 
@@ -254,6 +255,7 @@ backBtn.addEventListener('click', () => {
     clearInterval(timer);
     gameView.classList.add('hidden');
     dashboardView.classList.remove('hidden');
+    document.body.classList.remove('quiz-active'); // Remove layout tracking mode class
 });
 
 // Render Administration System Engine Elements
