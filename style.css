@@ -21,18 +21,16 @@ body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
 }
 
 /* Master View Layout States */
 .view {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
 .hidden {
@@ -65,12 +63,12 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-/* Dashboard 4x4 Grid Controls Layout */
+/* Dashboard 2-Column Grid Layout */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    flex-grow: 1;
+    width: 100%;
 }
 
 .tile {
@@ -81,9 +79,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 25px 15px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
 }
 
 .tile:hover, .tile.focused {
@@ -94,12 +93,12 @@ body {
 }
 
 .tile-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 2.2rem;
+    margin-bottom: 8px;
 }
 
 .tile-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -122,8 +121,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex-grow: 1;
-    justify-content: center;
+    margin-top: 10px;
 }
 
 .scenario-box {
