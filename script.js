@@ -77,8 +77,20 @@ async function loadQuestionsFromFile() {
     updateAdminPanelList();
 }
 
+// Fisher-Yates Shuffling Engine to completely scramble order natively
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 function compileActiveQuizScenarios() {
-    activeScenarios = masterScenarios.filter(item => item.active === true);
+    // 1. Get only active items out of the master set
+    let activeItems = masterScenarios.filter(item => item.active === true);
+    // 2. Pass a shallow copy through the shuffle loop engine to randomize deployment track
+    activeScenarios = shuffleArray([...activeItems]);
 }
 
 /* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
@@ -185,7 +197,7 @@ function updateAdminPanelList() {
             </div>
         `;
         
-        // 1. CLICK TO EDIT
+        // CLICK TO EDIT
         card.querySelector('.admin-item-info').addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
             const targetScenario = masterScenarios[idx];
@@ -205,14 +217,14 @@ function updateAdminPanelList() {
             adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // 2. TOGGLE ON/OFF
+        // TOGGLE ON/OFF
         card.querySelector('input[data-toggle-index]').addEventListener('change', (e) => {
             const idx = parseInt(e.target.getAttribute('data-toggle-index'));
             masterScenarios[idx].active = e.target.checked;
             updateAdminPanelList();
         });
 
-        // 3. REMOVE/DELETE QUESTION
+        // REMOVE/DELETE QUESTION
         card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
