@@ -77,19 +77,8 @@ async function loadQuestionsFromFile() {
     updateAdminPanelList();
 }
 
-// Fisher-Yates Shuffle Algorithm to securely randomise array elements
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 function compileActiveQuizScenarios() {
-    // Filter out inactive scenarios, then completely randomize the order
-    const filtered = masterScenarios.filter(item => item.active === true);
-    activeScenarios = shuffleArray([...filtered]); 
+    activeScenarios = masterScenarios.filter(item => item.active === true);
 }
 
 /* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
@@ -159,7 +148,7 @@ document.getElementById('tile-titan').addEventListener('click', async () => {
     if (masterScenarios.length === 0) {
         await loadQuestionsFromFile();
     }
-    compileActiveQuizScenarios(); // Scrambles the deck right here!
+    compileActiveQuizScenarios();
     dashboardView.classList.add('hidden');
     gameView.classList.remove('hidden');
     startGame();
@@ -180,7 +169,7 @@ function updateAdminPanelList() {
     masterScenarios.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
-        card.style.cursor = 'pointer';
+        card.style.cursor = 'pointer'; // Visual cue that the card is clickable for editing
         
         card.innerHTML = `
             <div class="admin-item-info" data-index="${index}">
@@ -196,7 +185,7 @@ function updateAdminPanelList() {
             </div>
         `;
         
-        // CLICK TO EDIT
+        // 1. CLICK TO EDIT: Populates the text input boxes above
         card.querySelector('.admin-item-info').addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
             const targetScenario = masterScenarios[idx];
@@ -207,25 +196,27 @@ function updateAdminPanelList() {
             formOptC.value = targetScenario.options[2] || '';
             formOptD.value = targetScenario.options[3] || '';
             
+            // Map the text back to selection indexes
             if (targetScenario.correct === targetScenario.options[0]) formCorrect.value = "A";
             else if (targetScenario.correct === targetScenario.options[1]) formCorrect.value = "B";
             else if (targetScenario.correct === targetScenario.options[2]) formCorrect.value = "C";
             else if (targetScenario.correct === targetScenario.options[3]) formCorrect.value = "D";
             else formCorrect.value = "";
             
+            // Scroll to the top input container inside the modal smoothly
             adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // TOGGLE ON/OFF
+        // 2. TOGGLE ON/OFF
         card.querySelector('input[data-toggle-index]').addEventListener('change', (e) => {
             const idx = parseInt(e.target.getAttribute('data-toggle-index'));
             masterScenarios[idx].active = e.target.checked;
             updateAdminPanelList();
         });
 
-        // REMOVE/DELETE QUESTION
+        // 3. REMOVE/DELETE QUESTION
         card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
-            e.stopPropagation(); 
+            e.stopPropagation(); // Stops the element from triggering click-to-edit
             const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
             
             if (confirm(`Are you sure you want to permanently delete Question #${idx + 1}?`)) {
@@ -319,10 +310,7 @@ function loadScenario() {
     if (optionsContainer) {
         optionsContainer.innerHTML = '';
 
-        // Randomise the order of the 4 multiple-choice answers too so button positioning changes!
-        const randomizedOptions = shuffleArray([...currentScenario.options]);
-
-        randomizedOptions.forEach(option => {
+        currentScenario.options.forEach(option => {
             const button = document.createElement('button');
             button.className = 'option-btn';
             button.textContent = option;
@@ -367,10 +355,7 @@ function nextScenario() {
             restartBtn.className = 'option-btn';
             restartBtn.style.gridColumn = '1 / -1';
             restartBtn.textContent = 'Play Again';
-            restartBtn.addEventListener('click', () => {
-                compileActiveQuizScenarios(); // Generate a fresh shuffle for the retry!
-                startGame();
-            });
+            restartBtn.addEventListener('click', startGame);
             optionsContainer.appendChild(restartBtn);
         }
     }
