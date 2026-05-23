@@ -21,16 +21,18 @@ body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Master View Layout States */
 .view {
-    min-height: 100vh;
+    height: 100vh;
     width: 100vw;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .hidden {
@@ -63,12 +65,12 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-/* Dashboard 2-Column Grid Layout */
+/* Dashboard Grid Layout Configuration */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    width: 100%;
+    flex-grow: 1;
 }
 
 .tile {
@@ -79,10 +81,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px 15px;
+    padding: 20px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: center;
 }
 
 .tile:hover, .tile.focused {
@@ -93,12 +94,12 @@ body {
 }
 
 .tile-icon {
-    font-size: 2.2rem;
-    margin-bottom: 8px;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
 }
 
 .tile-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -121,7 +122,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-top: 10px;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 .scenario-box {
@@ -179,52 +181,6 @@ body {
     border-color: var(--accent-error) !important;
     color: var(--accent-error);
 }
-
-/* Local High Scores Table Leaderboard Module UI Elements */
-.leaderboard-container {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 16px;
-    padding: 15px;
-    margin: 10px 0;
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.leaderboard-table th, 
-.leaderboard-table td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.leaderboard-table th {
-    color: var(--accent-glow);
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-
-.leaderboard-table td {
-    color: var(--text-primary);
-    font-size: 0.95rem;
-}
-
-.leaderboard-table tr:last-child td {
-    border-bottom: none;
-}
-
-/* Podium Placement Highlight Typography Hooks */
-.leaderboard-table tr:nth-child(1) td { color: #ffd700; font-weight: 700; } 
-.leaderboard-table tr:nth-child(2) td { color: #c0c0c0; font-weight: 700; } 
-.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: 700; } 
 
 /* Security Keypad PIN Pad Modal View Layer Override */
 .modal-overlay {
@@ -326,3 +282,50 @@ input:checked + .switch-slider:before { transform: translateX(20px); }
 .icon-btn { font-size: 1.4rem; padding: 5px; }
 .back-btn { font-size: 1rem; font-weight: 600; display: flex; align-items: center; }
 .help-text { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+
+/* ========================================================== */
+/*   NEW LEADERBOARD EXTENSIONS (DO NOT CHANGE UPPER CODES)   */
+/* ========================================================== */
+.leaderboard-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 15px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.leaderboard-table th, 
+.leaderboard-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.leaderboard-table th {
+    color: var(--accent-glow);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.leaderboard-table td {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.leaderboard-table tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard-table tr:nth-child(1) td { color: #ffd700; font-weight: 700; } 
+.leaderboard-table tr:nth-child(2) td { color: #c0c0c0; font-weight: 700; } 
+.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
