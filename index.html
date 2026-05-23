@@ -86,6 +86,36 @@
         </main>
     </div>
 
+    <!-- SECURITY GATE PASSCODE MODAL -->
+    <div class="admin-modal hidden" id="auth-panel">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h3><span class="material-icons-outlined">lock</span> Admin Verification</h3>
+                <span class="material-icons-outlined close-btn" id="auth-close">close</span>
+            </div>
+            <div class="pin-display">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+            <div class="pin-grid">
+                <button class="pin-btn" data-value="1">1</button>
+                <button class="pin-btn" data-value="2">2</button>
+                <button class="pin-btn" data-value="3">3</button>
+                <button class="pin-btn" data-value="4">4</button>
+                <button class="pin-btn" data-value="5">5</button>
+                <button class="pin-btn" data-value="6">6</button>
+                <button class="pin-btn" data-value="7">7</button>
+                <button class="pin-btn" data-value="8">8</button>
+                <button class="pin-btn" data-value="9">9</button>
+                <button class="pin-btn action-clear material-icons-outlined" id="pin-clear">backspace</button>
+                <button class="pin-btn" data-value="0">0</button>
+                <button class="pin-btn action-go material-icons-outlined" id="pin-submit">check</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ADMIN PANEL MODAL OVERLAY -->
     <div class="admin-modal hidden" id="admin-panel">
         <div class="admin-box">
