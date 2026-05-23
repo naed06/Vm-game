@@ -3,11 +3,13 @@ const dashboardView = document.getElementById('dashboard-view');
 const gameView = document.getElementById('game-view');
 const backBtn = document.getElementById('game-back-btn');
 
-// Game Engine Elements
-const scenarioText = document.getElementById('scenario-text');
-const optionsContainer = document.getElementById('options-container');
-const scoreDisplay = document.getElementById('game-score');
-const timerDisplay = document.getElementById('game-timer');
+// Security Passcode Elements
+const authPanel = document.getElementById('auth-panel');
+const authClose = document.getElementById('auth-close');
+const pinClear = document.getElementById('pin-clear');
+const pinSubmit = document.getElementById('pin-submit');
+const pinDots = document.querySelectorAll('.pin-dot');
+const pinButtons = document.querySelectorAll('.pin-grid .pin-btn[data-value]');
 
 // Admin Panel Elements
 const adminModal = document.getElementById('admin-panel');
@@ -26,6 +28,10 @@ const formOptD = document.getElementById('form-optD');
 const formCorrect = document.getElementById('form-correct');
 const addScenarioBtn = document.getElementById('add-scenario-btn');
 const copyJsonBtn = document.getElementById('copy-json-btn');
+
+// System Configurations
+const SECRET_PASSPHRASE_PIN = "2026"; // Feel free to update this 4-digit code as required
+let enteredPinBuffer = "";
 
 // Global Master Dataset Pipeline States
 let masterScenarios = []; 
@@ -52,8 +58,7 @@ async function loadQuestionsFromFile() {
         
         console.log("Master dataset loaded successfully from questions.json!");
     } catch (error) {
-        console.error("Data pipeline load error, using default layout scenario configuration:", error);
-        // Fallback default system sample layout block if local asset file doesn't load yet
+        console.error("Data pipeline load error, using default layout configuration:", error);
         masterScenarios = [
             {
                 text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage. What is the lowest airtime price point?",
@@ -70,27 +75,74 @@ function compileActiveQuizScenarios() {
     activeScenarios = masterScenarios.filter(item => item.active === true);
 }
 
-// Admin Panel Event Core Toggle Listeners
-adminTrigger.addEventListener('click', async () => {
-    if (masterScenarios.length === 0) {
-        await loadQuestionsFromFile();
-    }
-    updateAdminPanelList();
-    adminModal.classList.remove('hidden');
+/* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
+adminTrigger.addEventListener('click', () => {
+    resetPinPadState();
+    authPanel.classList.remove('hidden');
 });
 
+authClose.addEventListener('click', () => {
+    authPanel.classList.add('hidden');
+});
+
+// Capture keypad presses
+pinButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (enteredPinBuffer.length < 4) {
+            enteredPinBuffer += btn.getAttribute('data-value');
+            renderPinDots();
+        }
+    });
+});
+
+pinClear.addEventListener('click', () => {
+    if (enteredPinBuffer.length > 0) {
+        enteredPinBuffer = enteredPinBuffer.slice(0, -1);
+        renderPinDots();
+    }
+});
+
+pinSubmit.addEventListener('click', async () => {
+    if (enteredPinBuffer === SECRET_PASSPHRASE_PIN) {
+        authPanel.classList.add('hidden');
+        if (masterScenarios.length === 0) {
+            await loadQuestionsFromFile();
+        }
+        updateAdminPanelList();
+        adminModal.classList.remove('hidden');
+    } else {
+        // Trigger verification failure pulse animation
+        enteredPinBuffer = "";
+        renderPinDots();
+        alert("ACCESS DENIED: Invalid Passcode Security Signature.");
+    }
+});
+
+function renderPinDots() {
+    pinDots.forEach((dot, index) => {
+        if (index < enteredPinBuffer.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function resetPinPadState() {
+    enteredPinBuffer = "";
+    renderPinDots();
+}
+
+/* --- MAIN PANEL ENGINE HOOKS --- */
 adminClose.addEventListener('click', () => {
     adminModal.classList.add('hidden');
 });
 
-// Launch Tariff Titan Game Selection Engine
 document.getElementById('tile-titan').addEventListener('click', async () => {
     if (masterScenarios.length === 0) {
         await loadQuestionsFromFile();
     }
-    
     compileActiveQuizScenarios();
-    
     dashboardView.classList.add('hidden');
     gameView.classList.remove('hidden');
     startGame();
@@ -162,7 +214,6 @@ addScenarioBtn.addEventListener('click', () => {
         active: true
     });
 
-    // Reset Inputs Components Form Layout Block
     formText.value = '';
     formOptA.value = '';
     formOptB.value = '';
@@ -260,7 +311,6 @@ function nextScenario() {
     }
 }
 
-// Focus UI Navigation Handler Wire Frame Link Hooks Loops
 document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
         const current = document.querySelector('.tile.focused');
