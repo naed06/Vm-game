@@ -1,244 +1,320 @@
-// Screens
-const mainMenu = document.getElementById('main-menu');
-const gameScreen = document.getElementById('game-screen');
+// Navigation Elements
+const dashboardView = document.getElementById('dashboard-view');
+const gameView = document.getElementById('game-view');
+const backBtn = document.getElementById('game-back-btn');
 
-// Triggers & Back Elements
-const startGameBtn = document.getElementById('start-game-btn');
-const backBtn = document.getElementById('back-btn');
-const adminBtn = document.getElementById('admin-btn');
-
-// Gameplay Dom Hooks
-const questionText = document.getElementById('question-text');
-const optionsGrid = document.getElementById('options-grid');
-const scoreDisplay = document.getElementById('score');
-const timerDisplay = document.getElementById('time-left');
-
-// Passcode Panels
-const pinModal = document.getElementById('pin-modal');
-const pinInput = document.getElementById('pin-input');
-const pinCancel = document.getElementById('pin-cancel');
+// Security Passcode Elements
+const authPanel = document.getElementById('auth-panel');
+const authClose = document.getElementById('auth-close');
+const pinClear = document.getElementById('pin-clear');
 const pinSubmit = document.getElementById('pin-submit');
+const pinDots = document.querySelectorAll('.pin-dot');
+const pinButtons = document.querySelectorAll('.pin-grid .pin-btn[data-value]');
 
-// Administration Panels
-const adminModal = document.getElementById('admin-modal');
+// Admin Panel Elements
+const adminModal = document.getElementById('admin-panel');
+const adminTrigger = document.getElementById('settings-trigger');
 const adminClose = document.getElementById('admin-close');
-const questionsList = document.getElementById('questions-list');
+const scenariosListContainer = document.getElementById('scenarios-list-container');
+const questionCountDisplay = document.getElementById('question-count');
 const jsonOutput = document.getElementById('json-output');
 
-// Admin Input Fields
-const newQText = document.getElementById('new-q-text');
-const newQA = document.getElementById('new-q-a');
-const newQB = document.getElementById('new-q-b');
-const newQC = document.getElementById('new-q-c');
-const newQD = document.getElementById('new-q-d');
-const newQCorrect = document.getElementById('new-q-correct');
-const saveQBtn = document.getElementById('save-q-btn');
-const copyJsonBtn = document.getElementById('copy-json');
+// Admin Form Inputs
+const formText = document.getElementById('form-text');
+const formOptA = document.getElementById('form-optA');
+const formOptB = document.getElementById('form-optB');
+const formOptC = document.getElementById('form-optC');
+const formOptD = document.getElementById('form-optD');
+const formCorrect = document.getElementById('form-correct');
+const addScenarioBtn = document.getElementById('add-scenario-btn');
+const copyJsonBtn = document.getElementById('copy-json-btn');
 
-// Global System Variables
-const ADMIN_PIN = "2026";
+// System Configurations
+const SECRET_PASSPHRASE_PIN = "2026"; // Feel free to update this 4-digit code as required
+let enteredPinBuffer = "";
+
+// Global Master Dataset Pipeline States
 let masterScenarios = [];
+let activeScenarios = [];
 let score = 0;
 let timer;
 let timeLeft = 20;
-let currentQuestionIndex = 0;
+let currentScenarioIndex = 0;
 
-// Dynamic Data Fetcher Pipeline
-async function fetchQuestions() {
+// Dynamic File Fetcher Engine
+async function loadQuestionsFromFile() {
     try {
         const response = await fetch('questions.json');
-        if (!response.ok) throw new Error("Could not find file");
-        masterScenarios = await response.json();
-    } catch (err) {
-        console.log("No file found, setting defaults.");
+        if (!response.ok) throw new Error('No questions data file located');
+        
+        const rawData = await response.json();
+        
+        masterScenarios = rawData.map(item => ({
+            text: item.text,
+            options: item.options,
+            correct: item.correct,
+            active: item.active !== undefined ? item.active : true
+        }));
+        
+        console.log("Master dataset loaded successfully from questions.json!");
+    } catch (error) {
+        console.error("Data pipeline load error, using default layout configuration:", error);
         masterScenarios = [
             {
-                text: "What is the primary baseline price point for light airtime options?",
-                options: ["£12.00/mo", "£15.00/mo", "£29.99/mo", "£39.99/mo"],
-                correct: "£12.00/mo"
+                text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage. What is the lowest airtime price point?",
+                options: ["£29.99/mo", "£12.00/mo", "£39.99/mo", "£15.00/mo"],
+                correct: "£12.00/mo",
+                active: true
             }
         ];
     }
-    updateAdminView();
+    updateAdminPanelList();
 }
 
-// MAIN APP ROUTING ENGINE
-startGameBtn.addEventListener('click', async () => {
-    if (masterScenarios.length === 0) {
-        await fetchQuestions();
+function compileActiveQuizScenarios() {
+    activeScenarios = masterScenarios.filter(item => item.active === true);
+}
+
+/* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
+adminTrigger.addEventListener('click', () => {
+    resetPinPadState();
+    authPanel.classList.remove('hidden');
+});
+
+authClose.addEventListener('click', () => {
+    authPanel.classList.add('hidden');
+});
+
+// Capture keypad presses
+pinButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (enteredPinBuffer.length < 4) {
+            enteredPinBuffer += btn.getAttribute('data-value');
+            renderPinDots();
+        }
+    });
+});
+
+pinClear.addEventListener('click', () => {
+    if (enteredPinBuffer.length > 0) {
+        enteredPinBuffer = enteredPinBuffer.slice(0, -1);
+        renderPinDots();
     }
-    mainMenu.classList.add('hidden');
-    gameScreen.classList.remove('hidden');
-    runGameEngine();
-});
-
-backBtn.addEventListener('click', () => {
-    clearInterval(timer);
-    gameScreen.classList.add('hidden');
-    mainMenu.classList.remove('hidden');
-});
-
-/* --- SECURITY PIN HANDLERS --- */
-adminBtn.addEventListener('click', () => {
-    pinInput.value = "";
-    pinModal.classList.remove('hidden');
-});
-
-pinCancel.addEventListener('click', () => {
-    pinModal.classList.add('hidden');
 });
 
 pinSubmit.addEventListener('click', async () => {
-    if (pinInput.value === ADMIN_PIN) {
-        pinModal.classList.add('hidden');
+    if (enteredPinBuffer === SECRET_PASSPHRASE_PIN) {
+        authPanel.classList.add('hidden');
         if (masterScenarios.length === 0) {
-            await fetchQuestions();
+            await loadQuestionsFromFile();
         }
+        updateAdminPanelList();
         adminModal.classList.remove('hidden');
     } else {
-        alert("Incorrect PIN");
-        pinInput.value = "";
+        // Trigger verification failure pulse animation
+        enteredPinBuffer = "";
+        renderPinDots();
+        alert("ACCESS DENIED: Invalid Passcode Security Signature.");
     }
 });
 
-/* --- ADMINISTRATION ENGINE CONTROLLERS --- */
+function renderPinDots() {
+    pinDots.forEach((dot, index) => {
+        if (index < enteredPinBuffer.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function resetPinPadState() {
+    enteredPinBuffer = "";
+    renderPinDots();
+}
+
+/* --- MAIN PANEL ENGINE HOOKS --- */
 adminClose.addEventListener('click', () => {
     adminModal.classList.add('hidden');
 });
 
-saveQBtn.addEventListener('click', () => {
-    const qText = newQText.value.trim();
-    const optA = newQA.value.trim();
-    const optB = newQB.value.trim();
-    const optC = newQC.value.trim();
-    const optD = newQD.value.trim();
-    const correctLetter = newQCorrect.value;
-
-    if (!qText || !optA || !optB || !optC || !optD || !correctLetter) {
-        alert("Fill in all properties before trying to commit data.");
-        return;
+document.getElementById('tile-titan').addEventListener('click', async () => {
+    if (masterScenarios.length === 0) {
+        await loadQuestionsFromFile();
     }
-
-    const opts = [optA, optB, optC, optD];
-    let correctString = "";
-    if (correctLetter === "A") correctString = optA;
-    if (correctLetter === "B") correctString = optB;
-    if (correctLetter === "C") correctString = optC;
-    if (correctLetter === "D") correctString = optD;
-
-    masterScenarios.push({
-        text: qText,
-        options: opts,
-        correct: correctString
-    });
-
-    newQText.value = "";
-    newQA.value = "";
-    newQB.value = "";
-    newQC.value = "";
-    newQD.value = "";
-    newQCorrect.value = "";
-
-    updateAdminView();
+    compileActiveQuizScenarios();
+    dashboardView.classList.add('hidden');
+    gameView.classList.remove('hidden');
+    startGame();
 });
 
-function updateAdminView() {
-    questionsList.innerHTML = "";
+backBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    gameView.classList.add('hidden');
+    dashboardView.classList.remove('hidden');
+});
+
+// Render Administration System Engine Elements
+function updateAdminPanelList() {
+    scenariosListContainer.innerHTML = '';
+    questionCountDisplay.textContent = masterScenarios.length;
+
     masterScenarios.forEach((item, index) => {
-        const itemRow = document.createElement('div');
-        itemRow.className = "q-list-item";
-        itemRow.innerHTML = `
-            <span><strong>#${index + 1}:</strong> ${item.text.substring(0, 30)}...</span>
-            <button class="delete-btn" onclick="removeQuestion(${index})">🗑️</button>
+        const card = document.createElement('div');
+        card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
+        
+        card.innerHTML = `
+            <div class="admin-item-info">
+                <p>${item.text}</p>
+                <div class="admin-item-meta">Ans: <strong>${item.correct}</strong></div>
+            </div>
+            <label class="switch-control">
+                <input type="checkbox" ${item.active ? 'checked' : ''} data-index="${index}">
+                <span class="switch-slider"></span>
+            </label>
         `;
-        questionsList.appendChild(itemRow);
+        
+        card.querySelector('input').addEventListener('change', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-index'));
+            masterScenarios[idx].active = e.target.checked;
+            updateAdminPanelList();
+        });
+
+        scenariosListContainer.appendChild(card);
     });
+
     jsonOutput.value = JSON.stringify(masterScenarios, null, 4);
 }
 
-window.removeQuestion = function(index) {
-    masterScenarios.splice(index, 1);
-    updateAdminView();
-};
+// Add New Scenario Action Builder Engine Trigger Hook
+addScenarioBtn.addEventListener('click', () => {
+    const textVal = formText.value.trim();
+    const optA = formOptA.value.trim();
+    const optB = formOptB.value.trim();
+    const optC = formOptC.value.trim();
+    const optD = formOptD.value.trim();
+    const correctSelect = formCorrect.value;
 
+    if (!textVal || !optA || !optB || !optC || !optD || !correctSelect) {
+        alert("Please completely fill out all the question configuration parameters.");
+        return;
+    }
+
+    const optionsArray = [optA, optB, optC, optD];
+    let correctString = "";
+    if (correctSelect === "A") correctString = optA;
+    if (correctSelect === "B") correctString = optB;
+    if (correctSelect === "C") correctString = optC;
+    if (correctSelect === "D") correctString = optD;
+
+    masterScenarios.push({
+        text: textVal,
+        options: optionsArray,
+        correct: correctString,
+        active: true
+    });
+
+    formText.value = '';
+    formOptA.value = '';
+    formOptB.value = '';
+    formOptC.value = '';
+    formOptD.value = '';
+    formCorrect.value = '';
+
+    updateAdminPanelList();
+});
+
+// Copy JSON Clipboard Tool System Hook Engine Element
 copyJsonBtn.addEventListener('click', () => {
     jsonOutput.select();
     document.execCommand('copy');
-    alert("JSON Data configuration package copied!");
+    alert("Configurations copied successfully to clipboard! Update questions.json on GitHub.");
 });
 
-/* --- GAME RUNTIME LOOP CORE --- */
-function runGameEngine() {
+// GAMEPLAY SIMULATOR RUNTIME CONTROLLER
+function startGame() {
     score = 0;
-    currentQuestionIndex = 0;
+    currentScenarioIndex = 0;
     scoreDisplay.textContent = score;
-    renderQuestion();
+   
+    if (activeScenarios.length > 0) {
+        loadScenario();
+    } else {
+        scenarioText.textContent = "No active scenarios available. Open configuration settings view to activate questions.";
+        optionsContainer.innerHTML = '';
+    }
 }
 
-function renderQuestion() {
+function loadScenario() {
     clearInterval(timer);
     timeLeft = 20;
     timerDisplay.textContent = timeLeft;
-
+   
     timer = setInterval(() => {
         timeLeft--;
         timerDisplay.textContent = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(timer);
-            advanceEngine();
+            nextScenario();
         }
     }, 1000);
 
-    const currentData = masterScenarios[currentQuestionIndex];
-    questionText.textContent = currentData.text;
-    optionsGrid.innerHTML = "";
+    const currentScenario = activeScenarios[currentScenarioIndex];
+    scenarioText.textContent = currentScenario.text;
+    optionsContainer.innerHTML = '';
 
-    currentData.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = "option-btn";
-        btn.textContent = opt;
-        btn.addEventListener('click', () => evaluateChoice(btn, opt, currentData.correct));
-        optionsGrid.appendChild(btn);
+    currentScenario.options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.textContent = option;
+        button.addEventListener('click', () => checkAnswer(button, option, currentScenario.correct));
+        optionsContainer.appendChild(button);
     });
 }
 
-function evaluateChoice(selectedBtn, pickedVal, realVal) {
+function checkAnswer(selectedButton, chosenOption, correctOption) {
     clearInterval(timer);
-    const options = optionsGrid.querySelectorAll('.option-btn');
-    options.forEach(b => b.style.pointerEvents = "none");
+   
+    const allButtons = document.querySelectorAll('.option-btn');
+    allButtons.forEach(btn => btn.style.pointerEvents = 'none');
 
-    if (pickedVal === realVal) {
-        selectedBtn.classList.add('correct');
+    if (chosenOption === correctOption) {
+        selectedButton.classList.add('correct');
         score += 100;
         scoreDisplay.textContent = score;
     } else {
-        selectedBtn.classList.add('wrong');
-        options.forEach(b => {
-            if (b.textContent === realVal) b.classList.add('correct');
+        selectedButton.classList.add('wrong');
+        allButtons.forEach(btn => {
+            if (btn.textContent === correctOption) btn.classList.add('correct');
         });
     }
 
     setTimeout(() => {
-        advanceEngine();
+        nextScenario();
     }, 1500);
 }
 
-function advanceEngine() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < masterScenarios.length) {
-        renderQuestion();
+function nextScenario() {
+    currentScenarioIndex++;
+    if (currentScenarioIndex < activeScenarios.length) {
+        loadScenario();
     } else {
-        questionText.textContent = `Sprint Finished! Final Score: ${score}`;
-        optionsGrid.innerHTML = "";
-        
-        const resetBtn = document.createElement('button');
-        resetBtn.className = "option-btn";
-        resetBtn.textContent = "Restart Sprint Loop";
-        resetBtn.style.textAlign = "center";
-        resetBtn.addEventListener('click', runGameEngine);
-        optionsGrid.appendChild(resetBtn);
+        scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
+        optionsContainer.innerHTML = '';
+       
+        const restartBtn = document.createElement('button');
+        restartBtn.className = 'option-btn';
+        restartBtn.style.gridColumn = '1 / -1';
+        restartBtn.textContent = 'Play Again';
+        restartBtn.addEventListener('click', startGame);
+        optionsContainer.appendChild(restartBtn);
     }
 }
 
-// Warm up pipeline cache
-fetchQuestions();
+document.querySelectorAll('.tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+        const current = document.querySelector('.tile.focused');
+        if (current) current.classList.remove('focused');
+        tile.classList.add('focused');
+    });
+});
