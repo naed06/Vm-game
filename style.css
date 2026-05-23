@@ -1,331 +1,141 @@
-/* Core Structural Tokens & App Variables */
+/* Core Styling Variables & Layout Infrastructure */
 :root {
-    --bg-main: #0f111a;
-    --card-surface: #1a1d2e;
-    --card-hover: #252942;
-    --accent-glow: #ff3366;
-    --accent-success: #00e676;
-    --accent-error: #ff1744;
-    --text-primary: #ffffff;
-    --text-muted: #8b92b5;
-    --border-subtle: rgba(255, 255, 255, 0.08);
+    --bg-primary: #0b0f19;
+    --bg-surface: #131a2c;
+    --bg-card: #1c263e;
+    --text-main: #f0f4f8;
+    --text-muted: #8fa0be;
+    --accent-blue: #1e62ff;
+    --accent-success: #10b981;
+    --accent-danger: #ef4444;
+    --border-color: #2b3a5a;
+    --radius: 12px;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    overflow-x: hidden;
     height: 100vh;
-    overflow: hidden;
 }
 
-/* Master View Layout States */
-.view {
-    height: 100vh;
-    width: 100vw;
+.view-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     padding: 20px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
 .hidden {
     display: none !important;
 }
 
-.center-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-/* Home View Layout Top Bar Header */
+/* Header & Tiles Navigation Layout Elements */
 .app-header, .game-header, .admin-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
 
-.app-header h1 {
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-    font-weight: 800;
-    background: linear-gradient(45deg, #ff3366, #ff6699);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Dashboard Grid Layout Configuration */
-.grid-container {
+.grid-layout {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 16px;
     flex-grow: 1;
 }
 
 .tile {
-    background: var(--card-surface);
-    border: 2px solid transparent;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tile:hover, .tile.focused {
-    background: var(--card-hover);
-    border-color: var(--accent-glow);
-    box-shadow: 0 0 20px rgba(255, 51, 102, 0.25);
-    transform: translateY(-2px);
-}
-
-.tile-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-.tile-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-/* Gameplay Engine Screen Styling Elements */
-.game-stats {
-    display: flex;
-    gap: 15px;
-}
-
-.stat-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    border: 1px solid var(--border-subtle);
-}
-
-.game-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    flex-grow: 1;
-    justify-content: center;
-}
-
-.scenario-box {
-    background: var(--card-surface);
-    border-radius: 16px;
-    padding: 25px;
-    border-left: 5px solid var(--accent-glow);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.scenario-box p {
-    font-size: 1.15rem;
-    line-height: 1.5;
-    font-weight: 500;
-}
-
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-}
-
-@media(min-width: 600px) {
-    .options-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.option-btn {
-    background: var(--card-surface);
-    color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-    padding: 16px;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: left;
+    background: var(--bg-surface);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 24px;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-.option-btn:hover {
-    background: var(--card-hover);
-    border-color: var(--text-muted);
+.tile.focused {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(30, 98, 255, 0.3);
 }
 
-/* Answer Result States Feedback Hooks */
-.option-btn.correct {
-    background: rgba(0, 230, 118, 0.15) !important;
-    border-color: var(--accent-success) !important;
-    color: var(--accent-success);
-    font-weight: bold;
+.tile-content h2 { margin: 12px 0 6px; font-size: 1.4rem; }
+.tile-content p { color: var(--text-muted); font-size: 0.9rem; }
+.tile-icon { font-size: 2rem; }
+
+/* Interactive Buttons */
+.icon-btn, .back-btn, .close-btn, .primary-btn {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
 }
-
-.option-btn.wrong {
-    background: rgba(255, 23, 68, 0.15) !important;
-    border-color: var(--accent-error) !important;
-    color: var(--accent-error);
+.primary-btn {
+    background: var(--accent-blue);
+    border: none;
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
 }
+.close-btn { font-size: 1.5rem; padding: 4px 12px; border: none; background: none; }
 
-/* Security Keypad PIN Pad Modal View Layer Override */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(10, 11, 18, 0.9);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 999;
-}
+/* Gameplay UI Component Elements */
+.game-stats { display: flex; gap: 12px; }
+.stat-box { background: var(--bg-surface); padding: 8px 14px; border-radius: var(--radius); font-weight: bold; border: 1px solid var(--border-color); }
+.game-arena { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; }
+.card-display { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 32px 24px; text-align: center; font-size: 1.25rem; min-height: 160px; display: flex; align-items: center; justify-content: center; }
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+.option-btn { background: var(--bg-surface); border: 2px solid var(--border-color); color: var(--text-main); padding: 16px; border-radius: var(--radius); font-size: 1rem; font-weight: 500; text-align: left; cursor: pointer; transition: background 0.1s; }
 
-.pin-modal {
-    background: var(--card-surface);
-    padding: 30px; border-radius: 24px;
-    width: 320px; text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    position: relative;
-}
+/* Feedback Status Layout States */
+.option-btn.correct { background: var(--accent-success) !important; border-color: var(--accent-success); color: white; }
+.option-btn.wrong { background: var(--accent-danger) !important; border-color: var(--accent-danger); color: white; }
 
-.pin-display {
-    display: flex; justify-content: center; gap: 15px; margin: 20px 0;
-}
+/* Security Modals & Input Layouts */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 7, 12, 0.85); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 15px; }
+.pin-card { background: var(--bg-surface); border: 2px solid var(--border-color); border-radius: var(--radius); padding: 24px; max-width: 340px; width: 100%; text-align: center; }
+.pin-display { display: flex; justify-content: center; gap: 16px; margin: 24px 0; }
+.pin-dot { width: 16px; height: 16px; border: 2px solid var(--border-color); border-radius: 50%; }
+.pin-dot.filled { background: var(--text-main); border-color: var(--text-main); }
+.pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pin-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); font-size: 1.5rem; padding: 16px 0; border-radius: var(--radius); cursor: pointer; font-weight: bold; }
+.pin-btn.action-btn { background: var(--bg-primary); font-size: 1.1rem; }
 
-.pin-dot {
-    width: 14px; height: 14px; border: 2px solid var(--text-muted); border-radius: 50%;
-}
+/* Administrative Systems Controls view */
+.admin-container { background: var(--bg-primary); border: 1px solid var(--border-color); width: 100%; max-width: 560px; height: 90vh; border-radius: var(--radius); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+.admin-form-section, .admin-list-section, .admin-sync-section { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius); margin-bottom: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.form-group label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+.form-group input, .form-group select, #json-output { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.95rem; }
+.options-inputs-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#json-output { width: 100%; height: 140px; font-family: monospace; font-size: 0.8rem; resize: none; margin-top: 8px; }
 
-.pin-dot.filled {
-    background: var(--accent-glow); border-color: var(--accent-glow);
-}
+/* Control Checklist Cards Elements */
+.admin-scenarios-list { display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto; margin-top: 8px; }
+.admin-item-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+.admin-item-card.disabled { opacity: 0.4; }
+.admin-item-info p { font-size: 0.9rem; margin-bottom: 4px; padding-right: 10px; }
+.admin-item-meta { font-size: 0.75rem; color: var(--text-muted); }
 
-.pin-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-}
-
-.pin-btn {
-    background: rgba(255,255,255,0.04); color: var(--text-primary);
-    border: 1px solid var(--border-subtle); font-size: 1.3rem; font-weight: 600;
-    padding: 15px; border-radius: 50%; cursor: pointer; aspect-ratio: 1;
-}
-
-.pin-btn:hover { background: var(--card-hover); border-color: var(--accent-glow); }
-.pin-btn.action { font-size: 1rem; background: rgba(255,255,255,0.08); border-radius: 12px; }
-
-/* Control Configuration Panels Structural Logic */
-.admin-container {
-    background: var(--bg-main); width: 95vw; height: 90vh; max-width: 900px;
-    border-radius: 20px; display: flex; flex-direction: column;
-    padding: 20px; overflow: hidden; border: 1px solid var(--border-subtle);
-}
-
-.admin-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; padding-right: 5px; }
-.admin-section { background: var(--card-surface); padding: 20px; border-radius: 14px; border: 1px solid var(--border-subtle); }
-.form-card .input-group, .form-card .form-grid-2x2 { margin-bottom: 15px; }
-
-label { display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; }
-textarea, input[type="text"], select {
-    width: 100%; background: rgba(0,0,0,0.2); color: var(--text-primary);
-    border: 1px solid var(--border-subtle); padding: 12px; border-radius: 8px; font-size: 0.95rem;
-}
-textarea { height: 80px; resize: none; }
-.form-grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-/* Dashboard List Feed Item Display Cards Styling */
-.admin-feed-scroller { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-.admin-item-card {
-    background: rgba(0,0,0,0.15); border-radius: 8px; padding: 12px 15px;
-    display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle);
-}
-.admin-item-card.disabled { opacity: 0.4; border-style: dashed; }
-.admin-item-info p { font-size: 0.9rem; margin-bottom: 4px; padding-right: 15px; line-height: 1.4; }
-.admin-item-meta { font-size: 0.8rem; color: var(--text-muted); }
-
-/* Custom Form Input Fields & System Control Wrappers */
-.action-btn-primary, .action-btn-secondary {
-    width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; font-size: 0.95rem;
-}
-.action-btn-primary { background: var(--accent-glow); color: white; }
-.action-btn-secondary { background: rgba(255,255,255,0.08); color: white; margin-top: 10px; }
-#json-output { height: 120px; font-family: monospace; font-size: 0.85rem; background: #05060b; color: #00e676; }
-
-/* Custom Built Slider Toggle Switches */
-.switch-control { position: relative; display: inline-block; width: 44px; height: 24px; }
+/* Switch Toggle Styling Elements */
+.switch-control { position: relative; display: inline-block; width: 44px; height: 24px; shrink: 0; }
 .switch-control input { opacity: 0; width: 0; height: 0; }
-.switch-slider {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #3e4463; border-radius: 24px; transition: .3s; cursor: pointer;
-}
-.switch-slider:before {
-    position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-    background-color: white; border-radius: 50%; transition: .3s;
-}
-input:checked + .switch-slider { background-color: var(--accent-glow); }
-input:checked + .switch-slider:before { transform: translateX(20px); }
-
-/* Global Navigation Interaction Elements */
-.close-btn, .icon-btn, .back-btn { background: none; border: none; color: var(--text-primary); cursor: pointer; }
-.close-btn { font-size: 2rem; position: absolute; top: 10px; right: 15px; color: var(--text-muted); }
-.admin-header .close-btn { position: static; font-size: 1.8rem; }
-.icon-btn { font-size: 1.4rem; padding: 5px; }
-.back-btn { font-size: 1rem; font-weight: 600; display: flex; align-items: center; }
-.help-text { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
-
-/* ========================================================== */
-/*   NEW LEADERBOARD EXTENSIONS (DO NOT CHANGE UPPER CODES)   */
-/* ========================================================== */
-.leaderboard-container {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 16px;
-    padding: 15px;
-    margin: 10px 0;
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.leaderboard-table th, 
-.leaderboard-table td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.leaderboard-table th {
-    color: var(--accent-glow);
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-
-.leaderboard-table td {
-    color: var(--text-primary);
-    font-size: 0.95rem;
-}
-
-.leaderboard-table tr:last-child td {
-    border-bottom: none;
-}
-
-.leaderboard-table tr:nth-child(1) td { color: #ffd700; font-weight: 700; } 
-.leaderboard-table tr:nth-child(2) td { color: #c0c0c0; font-weight: 700; } 
-.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+.switch-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-primary); border: 1px solid var(--border-color); transition: .2s; border-radius: 24px; }
+.switch-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--text-muted); transition: .2s; border-radius: 50%; }
+input:checked + .switch-slider { background-color: var(--accent-blue); border-color: var(--accent-blue); }
+input:checked + .switch-slider:before { transform: translateX(20px); background-color: white; }
