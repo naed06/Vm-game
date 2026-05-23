@@ -196,24 +196,41 @@ body, html {
 input:checked + .switch-slider { background-color: #2e7d32; border-color: #4caf50; }
 input:checked + .switch-slider:before { transform: translateX(20px); }
 
-/* --- MOBILE LANDSCAPE RESPONSIVE FIX (From 7274.jpg Analysis) --- */
+/* --- SECURITY KEYPAD INTERFACE --- */
+.auth-box {
+    background: #1c142e; border: 2px solid var(--bg-accent);
+    width: 280px; padding: 20px; border-radius: 16px;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    animation: zoom-in-auth 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes zoom-in-auth { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.auth-header { display: flex; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.auth-header h3 { margin: 0; font-size: 0.95rem; text-transform: uppercase; display: flex; align-items: center; gap: 8px; color: var(--text-white); }
+
+.pin-display { display: flex; gap: 15px; margin: 10px 0 20px 0; height: 16px; align-items: center; }
+.pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: all 0.15s ease; }
+.pin-dot.filled { background-color: var(--vm-red); border-color: var(--vm-red); box-shadow: 0 0 10px var(--vm-red); }
+.pin-box.error .pin-dot { border-color: #c62828; animation: shake-pin 0.3s ease; }
+
+@keyframes shake-pin { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+.pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+.pin-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: white;
+    font-size: 1.25rem; font-weight: 700; border-radius: 50%; width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s;
+}
+.pin-btn:active { background: rgba(255,255,255,0.15); }
+.pin-btn.action-clear { color: var(--text-dim); font-size: 1.1rem; }
+.pin-btn.action-go { background: #2e7d32; border-color: #4caf50; }
+.pin-btn.action-go:active { background: #388e3c; }
+
+/* --- MOBILE RESPONSIVE TWEAKS FOR ADMIN --- */
 @media (max-width: 950px) {
-    .admin-box {
-        height: 92vh;
-        width: 95vw;
-    }
-    .admin-layout {
-        flex-direction: column;
-        overflow-y: auto;
-    }
-    .admin-form-side, .admin-list-side {
-        width: 100%;
-        overflow-y: visible;
-        border-right: none;
-        padding: 15px 20px;
-    }
-    .admin-list-side {
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        background: rgba(0,0,0,0.2);
-    }
+    .admin-box { height: 92vh; width: 95vw; }
+    .admin-layout { flex-direction: column; overflow-y: auto; }
+    .admin-form-side, .admin-list-side { width: 100%; overflow-y: visible; border-right: none; padding: 15px 20px; }
+    .admin-list-side { border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0,0,0,0.2); }
 }
