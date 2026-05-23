@@ -2,103 +2,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Sprint</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VM-Game Hub</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- MAIN DASHBOARD -->
-    <div id="main-menu" class="container">
-        <div class="header">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
-            </div>
-            <button id="admin-btn" class="icon-btn">⚙️</button>
+    <!-- Rotation Overlay -->
+    <div id="rotate-message">
+        <div class="message-content">
+            <div class="phone-icon material-icons-outlined">screen_rotation</div>
+            <h2>Please Rotate Your Device</h2>
+            <p>This dashboard is designed for landscape view.</p>
         </div>
+    </div>
 
-        <div class="grid">
-            <div class="card" id="start-game-btn">
-                <div class="card-icon">🎯</div>
-                <div class="card-title">Tariff Titan</div>
+    <!-- The Full-Color Logo Background Layer -->
+    <div class="background-watermark"></div>
+
+    <div class="main-container">
+        <header class="header">
+            <div class="header-spacer"></div>
+            <nav class="nav-links">
+                <div class="nav-item active" id="nav-home"><span class="material-icons-outlined">home</span> HOME</div>
+                <div class="nav-item"><span class="material-icons-outlined">apps</span> APPS</div>
+                <div class="nav-item"><span class="material-icons-outlined">sports_esports</span> GAMES</div>
+                <div class="nav-item"><span class="material-icons-outlined">leaderboard</span> LEADERBOARD</div>
+            </nav>
+            <div class="settings-btn material-icons-outlined" id="settings-trigger" style="cursor: pointer;">settings</div>
+        </header>
+
+        <!-- MAIN DASHBOARD VIEW -->
+        <main class="content-area" id="dashboard-view">
+            <section class="hero">
+                <h1 class="hero-title">sales sprint</h1>
+                <p id="hero-desc">Track targets and team performance.</p>
+            </section>
+
+            <section class="shelf">
+                <div class="tile-row">
+                    <div class="tile focused" id="tile-titan">
+                        <span class="tile-icon material-icons-outlined">stars</span>
+                        <div class="tile-overlay"><div class="tile-label">TARIFF TITAN</div></div>
+                    </div>
+                    <div class="tile" id="tile-broadband">
+                        <span class="material-icons-outlined tile-icon">wifi</span>
+                        <div class="tile-overlay"><div class="tile-label">BROADBAND</div></div>
+                    </div>
+                    <div class="tile" id="tile-scores">
+                        <span class="material-icons-outlined tile-icon">group</span>
+                        <div class="tile-overlay"><div class="tile-label">SCORES</div></div>
+                    </div>
+                    <div class="tile" id="tile-incentives">
+                        <span class="material-icons-outlined tile-icon">emoji_events</span>
+                        <div class="tile-overlay"><div class="tile-label">INCENTIVES</div></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- TARIFF TITAN GAME SCREEN VIEW -->
+        <main class="content-area hidden" id="game-view">
+            <div class="game-container">
+                <div class="game-header">
+                    <button class="back-btn" id="game-back-btn"><span class="material-icons-outlined">arrow_back</span> Back to Hub</button>
+                    <div class="game-stats">
+                        <div class="stat-box">SCORE: <span id="game-score">0</span></div>
+                        <div class="stat-box">TIMER: <span id="game-timer">20</span>s</div>
+                    </div>
+                </div>
+               
+                <div class="game-play-area">
+                    <div class="scenario-card">
+                        <h3>Scenario:</h3>
+                        <p id="scenario-text">Loading up your first customer challenge...</p>
+                    </div>
+                    <div class="options-grid" id="options-container">
+                        <!-- Options generated dynamically via JS -->
+                    </div>
+                </div>
             </div>
-            <div class="card locked">
-                <div class="card-icon">🔒</div>
-                <div class="card-title">Broadband</div>
+        </main>
+    </div>
+
+    <!-- SECURITY GATE PASSCODE MODAL -->
+    <div class="admin-modal hidden" id="auth-panel">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h3><span class="material-icons-outlined">lock</span> Admin Verification</h3>
+                <span class="material-icons-outlined close-btn" id="auth-close">close</span>
             </div>
-            <div class="card locked">
-                <div class="card-icon">🔒</div>
-                <div class="card-title">TV & Stream</div>
+            <div class="pin-display">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
             </div>
-            <div class="card locked">
-                <div class="card-icon">🔒</div>
-                <div class="card-title">Leaderboard</div>
+            <div class="pin-grid">
+                <button class="pin-btn" data-value="1">1</button>
+                <button class="pin-btn" data-value="2">2</button>
+                <button class="pin-btn" data-value="3">3</button>
+                <button class="pin-btn" data-value="4">4</button>
+                <button class="pin-btn" data-value="5">5</button>
+                <button class="pin-btn" data-value="6">6</button>
+                <button class="pin-btn" data-value="7">7</button>
+                <button class="pin-btn" data-value="8">8</button>
+                <button class="pin-btn" data-value="9">9</button>
+                <button class="pin-btn action-clear material-icons-outlined" id="pin-clear">backspace</button>
+                <button class="pin-btn" data-value="0">0</button>
+                <button class="pin-btn action-go material-icons-outlined" id="pin-submit">check</button>
             </div>
         </div>
     </div>
 
-    <!-- GAME SCREEN -->
-    <div id="game-screen" class="container hidden">
-        <div class="game-header">
-            <button id="back-btn" class="txt-btn">◀ Exit</button>
-            <div class="timer">Time: <span id="time-left">20</span>s</div>
-            <div class="score">Score: <span id="score">0</span></div>
-        </div>
-
-        <div class="question-box">
-            <p id="question-text">Loading...</p>
-        </div>
-
-        <div class="options-grid" id="options-grid">
-            <!-- Dynamic Buttons -->
-        </div>
-    </div>
-
-    <!-- PIN ENTRY MODAL -->
-    <div id="pin-modal" class="modal hidden">
-        <div class="modal-content pin-content">
-            <h3>Enter Admin PIN</h3>
-            <input type="password" id="pin-input" maxlength="4" placeholder="••••">
-            <div class="modal-actions">
-                <button id="pin-cancel" class="modal-btn cancel">Cancel</button>
-                <button id="pin-submit" class="modal-btn confirm">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ADMIN PANEL MODAL -->
-    <div id="admin-modal" class="modal hidden">
-        <div class="modal-content admin-content">
+    <!-- ADMIN PANEL MODAL OVERLAY -->
+    <div class="admin-modal hidden" id="admin-panel">
+        <div class="admin-box">
             <div class="admin-header">
-                <h3>Manage Questions</h3>
-                <button id="admin-close" class="close-btn">&times;</button>
+                <h2><span class="material-icons-outlined">admin_panel_settings</span> Hub Administration</h2>
+                <span class="material-icons-outlined close-btn" id="admin-close">close</span>
             </div>
-            
-            <div class="admin-body">
-                <div class="add-question-form">
-                    <input type="text" id="new-q-text" placeholder="Question Text">
-                    <input type="text" id="new-q-a" placeholder="Option A">
-                    <input type="text" id="new-q-b" placeholder="Option B">
-                    <input type="text" id="new-q-c" placeholder="Option C">
-                    <input type="text" id="new-q-d" placeholder="Option D">
-                    <select id="new-q-correct">
-                        <option value="" disabled selected>Select Correct Option</option>
-                        <option value="A">Option A</option>
-                        <option value="B">Option B</option>
-                        <option value="C">Option C</option>
-                        <option value="D">Option D</option>
-                    </select>
-                    <button id="save-q-btn" class="modal-btn confirm">Add Question</button>
+           
+            <div class="admin-layout">
+                <!-- Left Side: Creator Form -->
+                <div class="admin-form-side">
+                    <h3>Create New Scenario</h3>
+                    <div class="form-group">
+                        <label>Scenario Text</label>
+                        <textarea id="form-text" placeholder="e.g., Customer is looking for a balanced mid-tier plan..."></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Option A</label>
+                            <input type="text" id="form-optA" placeholder="e.g., £12.00/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option B</label>
+                            <input type="text" id="form-optB" placeholder="e.g., £29.99/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option C</label>
+                            <input type="text" id="form-optC" placeholder="e.g., £38.49/mo">
+                        </div>
+                        <div class="form-group">
+                            <label>Option D</label>
+                            <input type="text" id="form-optD" placeholder="e.g., £39.99/mo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Correct Answer Target</label>
+                        <select id="form-correct">
+                            <option value="">-- Select Correct Option --</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                    <button class="admin-btn action" id="add-scenario-btn"><span class="material-icons-outlined">add</span> Add to Master List</button>
+                   
+                    <hr class="admin-divider">
+                   
+                    <h3>Generate Data File</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: -5px;">Copy this text into your questions.json file on GitHub:</p>
+                    <textarea id="json-output" readonly placeholder="Your generated data file string will appear here..."></textarea>
+                    <button class="admin-btn copy" id="copy-json-btn"><span class="material-icons-outlined">content_copy</span> Copy JSON Code</button>
                 </div>
 
-                <div class="questions-list" id="questions-list">
-                    <!-- Added questions show up here -->
-                </div>
-
-                <div class="json-export-box">
-                    <label>Data Package Output:</label>
-                    <textarea id="json-output" readonly></textarea>
-                    <button id="copy-json" class="modal-btn standard">Copy Data Package</button>
+                <!-- Right Side: Live Active Toggles List -->
+                <div class="admin-list-side">
+                    <h3>Master Question Bank (<span id="question-count">0</span>)</h3>
+                    <div class="scenarios-list" id="scenarios-list-container">
+                        <!-- Loaded questions with toggle buttons injected here -->
+                    </div>
                 </div>
             </div>
         </div>
