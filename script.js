@@ -35,6 +35,13 @@ const formCorrect = document.getElementById('form-correct');
 const addScenarioBtn = document.getElementById('add-scenario-btn');
 const copyJsonBtn = document.getElementById('copy-json-btn');
 
+// Leaderboard Elements
+const leaderboardPanel = document.getElementById('leaderboard-panel');
+const leaderboardClose = document.getElementById('leaderboard-close');
+const leaderboardContainer = document.getElementById('leaderboard-container');
+const clearLeaderboardBtn = document.getElementById('clear-leaderboard-btn');
+const scoresTile = document.getElementById('tile-scores');
+
 // System Configurations
 const SECRET_PASSPHRASE_PIN = "2026"; 
 let enteredPinBuffer = "";
@@ -150,6 +157,84 @@ function resetPinPadState() {
     renderPinDots();
 }
 
+/* --- LEADERBOARD INTERFACE ENGINE --- */
+if (scoresTile) {
+    scoresTile.addEventListener('click', () => {
+        showLeaderboardModal();
+    });
+}
+
+if (leaderboardClose) {
+    leaderboardClose.addEventListener('click', () => {
+        leaderboardPanel.classList.add('hidden');
+    });
+}
+
+if (clearLeaderboardBtn) {
+    clearLeaderboardBtn.addEventListener('click', () => {
+        if (confirm("Are you sure you want to permanently wipe all leaderboard scores?")) {
+            localStorage.removeItem('vm_game_leaderboard');
+            showLeaderboardModal();
+        }
+    });
+}
+
+function showLeaderboardModal() {
+    if (!leaderboardContainer) return;
+    leaderboardContainer.innerHTML = '';
+
+    const highScores = JSON.parse(localStorage.getItem('vm_game_leaderboard')) || [];
+
+    if (highScores.length === 0) {
+        leaderboardContainer.innerHTML = `<p style="text-align: center; color: var(--text-dim); font-size: 0.9rem; margin: 20px 0;">No high scores recorded yet!</p>`;
+    } else {
+        highScores.forEach((entry, index) => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.justify = 'space-between';
+            row.style.alignItems = 'center';
+            row.style.padding = '8px 12px';
+            row.style.margin = '5px 0';
+            row.style.background = 'rgba(255, 255, 255, 0.03)';
+            row.style.border = '1px solid rgba(255, 255, 255, 0.05)';
+            row.style.borderRadius = '6px';
+            row.style.fontSize = '0.9rem';
+
+            let rankColor = 'var(--text-dim)';
+            if (index === 0) rankColor = '#ffd700'; 
+            if (index === 1) rankColor = '#c0c0c0'; 
+            if (index === 2) rankColor = '#cd7f32'; 
+
+            row.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: 800; color: ${rankColor}; width: 20px;">#${index + 1}</span>
+                    <span style="font-weight: 700;">${entry.score} pts</span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">${entry.date}</div>
+            `;
+            leaderboardContainer.appendChild(row);
+        });
+    }
+    leaderboardPanel.classList.remove('hidden');
+}
+
+function saveScoreToLeaderboard(finalScore) {
+    if (finalScore <= 0) return; 
+
+    const highScores = JSON.parse(localStorage.getItem('vm_game_leaderboard')) || [];
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-GB');
+
+    highScores.push({
+        score: finalScore,
+        date: formattedDate
+    });
+
+    highScores.sort((a, b) => b.score - a.score);
+    const topTen = highScores.slice(0, 10);
+    localStorage.setItem('vm_game_leaderboard', JSON.stringify(topTen));
+}
+
 /* --- MAIN PANEL ENGINE HOOKS --- */
 adminClose.addEventListener('click', () => {
     adminModal.classList.add('hidden');
@@ -159,7 +244,7 @@ document.getElementById('tile-titan').addEventListener('click', async () => {
     if (masterScenarios.length === 0) {
         await loadQuestionsFromFile();
     }
-    compileActiveQuizScenarios(); // Scrambles the deck right here!
+    compileActiveQuizScenarios(); 
     dashboardView.classList.add('hidden');
     gameView.classList.remove('hidden');
     startGame();
@@ -319,7 +404,6 @@ function loadScenario() {
     if (optionsContainer) {
         optionsContainer.innerHTML = '';
 
-        // Randomise the order of the 4 multiple-choice answers too so button positioning changes!
         const randomizedOptions = shuffleArray([...currentScenario.options]);
 
         randomizedOptions.forEach(option => {
@@ -360,6 +444,9 @@ function nextScenario() {
         loadScenario();
     } else {
         if (scenarioText) scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
+        
+        saveScoreToLeaderboard(score);
+
         if (optionsContainer) {
             optionsContainer.innerHTML = '';
             
@@ -368,7 +455,7 @@ function nextScenario() {
             restartBtn.style.gridColumn = '1 / -1';
             restartBtn.textContent = 'Play Again';
             restartBtn.addEventListener('click', () => {
-                compileActiveQuizScenarios(); // Generate a fresh shuffle for the retry!
+                compileActiveQuizScenarios(); 
                 startGame();
             });
             optionsContainer.appendChild(restartBtn);
