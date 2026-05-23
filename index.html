@@ -116,6 +116,24 @@
         </div>
     </div>
 
+    <!-- LEADERBOARD MODAL VIEW -->
+    <div class="admin-modal hidden" id="leaderboard-panel">
+        <div class="auth-box" style="width: 380px; max-width: 90vw;">
+            <div class="auth-header">
+                <h3><span class="material-icons-outlined">leaderboard</span> Top 10 Leaderboard</h3>
+                <span class="material-icons-outlined close-btn" id="leaderboard-close">close</span>
+            </div>
+            
+            <div id="leaderboard-container" style="width: 100%; margin: 10px 0; max-height: 50vh; overflow-y: auto;">
+                <!-- High scores injected here dynamically -->
+            </div>
+            
+            <button class="admin-btn copy" id="clear-leaderboard-btn" style="width: 100%; font-size: 0.75rem; padding: 8px; border-color: rgba(198, 40, 40, 0.4); color: #f44336;">
+                <span class="material-icons-outlined" style="font-size: 1rem;">delete_forever</span> Clear Leaderboard
+            </button>
+        </div>
+    </div>
+
     <!-- ADMIN PANEL MODAL OVERLAY -->
     <div class="admin-modal hidden" id="admin-panel">
         <div class="admin-box">
