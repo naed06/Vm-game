@@ -1,67 +1,469 @@
-/* --- LOCAL STORAGE LEADERBOARD INTERACTION MECHANICS --- */
-const highscoreView = document.getElementById('highscore-view');
-const highscoreTrigger = document.getElementById('highscore-trigger');
-const highscoreBackBtn = document.getElementById('highscore-back-btn');
-const leaderboardBody = document.getElementById('leaderboard-body');
+// Navigation Elements
+const dashboardView = document.getElementById('dashboard-view');
+const gameView = document.getElementById('game-view');
+const backBtn = document.getElementById('game-back-btn');
 
-// Track and save score at game over
-function recordEndGameScore(finalScore) {
-    let scores = JSON.parse(localStorage.getItem('tariff_titans_scores')) || [];
-    const newEntry = {
-        score: finalScore,
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-    };
-    scores.push(newEntry);
-    // Sort highest to lowest, trim down to top 10
-    scores.sort((a, b) => b.score - a.score);
-    scores = scores.slice(0, 10);
-    localStorage.setItem('tariff_titans_scores', JSON.stringify(scores));
+// Gameplay DOM Hook Elements
+const scenarioText = document.getElementById('scenario-text');
+const optionsContainer = document.getElementById('options-container');
+const scoreDisplay = document.getElementById('game-score');
+const timerDisplay = document.getElementById('game-timer');
+
+// Security Passcode Elements
+const authPanel = document.getElementById('auth-panel');
+const authClose = document.getElementById('auth-close');
+const pinClear = document.getElementById('pin-clear');
+const pinSubmit = document.getElementById('pin-submit');
+const pinDots = document.querySelectorAll('.pin-dot');
+const pinButtons = document.querySelectorAll('.pin-grid .pin-btn[data-value]');
+
+// Admin Panel Elements
+const adminModal = document.getElementById('admin-panel');
+const adminTrigger = document.getElementById('settings-trigger');
+const adminClose = document.getElementById('admin-close');
+const scenariosListContainer = document.getElementById('scenarios-list-container');
+const questionCountDisplay = document.getElementById('question-count');
+const jsonOutput = document.getElementById('json-output');
+
+// Admin Form Inputs
+const formText = document.getElementById('form-text');
+const formOptA = document.getElementById('form-optA');
+const formOptB = document.getElementById('form-optB');
+const formOptC = document.getElementById('form-optC');
+const formOptD = document.getElementById('form-optD');
+const formCorrect = document.getElementById('form-correct');
+const addScenarioBtn = document.getElementById('add-scenario-btn');
+const copyJsonBtn = document.getElementById('copy-json-btn');
+
+// System Configurations
+const SECRET_PASSPHRASE_PIN = "2026"; 
+let enteredPinBuffer = "";
+
+// Global Master Dataset Pipeline States
+let masterScenarios = []; 
+let activeScenarios = []; 
+let score = 0;
+let timer;
+let timeLeft = 20;
+let currentScenarioIndex = 0;
+
+// Dynamic File Fetcher Engine
+async function loadQuestionsFromFile() {
+    try {
+        const response = await fetch('questions.json');
+        if (!response.ok) throw new Error('No questions data file located');
+        
+        const rawData = await response.json();
+        
+        masterScenarios = rawData.map(item => ({
+            text: item.text,
+            options: item.options,
+            correct: item.correct,
+            active: item.active !== undefined ? item.active : true
+        }));
+        
+        console.log("Master dataset loaded successfully from questions.json!");
+    } catch (error) {
+        console.error("Data pipeline load error, using default layout configuration:", error);
+        masterScenarios = [
+            {
+                text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage. What is the lowest airtime price point?",
+                options: ["£12.00/mo", "£15.00/mo", "£29.99/mo", "£39.99/mo"],
+                correct: "£12.00/mo",
+                active: true
+            }
+        ];
+    }
+    updateAdminPanelList();
 }
 
-// Display top scores inside table layout
-function updateLeaderboardDisplay() {
-    if (!leaderboardBody) return;
-    const scores = JSON.parse(localStorage.getItem('tariff_titans_scores')) || [];
-    leaderboardBody.innerHTML = '';
+// Fisher-Yates Shuffle Algorithm to securely randomise array elements
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
-    if (scores.length === 0) {
-        leaderboardBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No records logged yet. Play a round!</td></tr>`;
+function compileActiveQuizScenarios() {
+    // Filter out inactive scenarios, then completely randomize the order
+    const filtered = masterScenarios.filter(item => item.active === true);
+    activeScenarios = shuffleArray([...filtered]); 
+}
+
+/* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
+if (adminTrigger) {
+    adminTrigger.addEventListener('click', () => {
+        resetPinPadState();
+        authPanel.classList.remove('hidden');
+    });
+}
+
+authClose.addEventListener('click', () => {
+    authPanel.classList.add('hidden');
+});
+
+pinButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (enteredPinBuffer.length < 4) {
+            enteredPinBuffer += btn.getAttribute('data-value');
+            renderPinDots();
+        }
+    });
+});
+
+pinClear.addEventListener('click', () => {
+    if (enteredPinBuffer.length > 0) {
+        enteredPinBuffer = enteredPinBuffer.slice(0, -1);
+        renderPinDots();
+    }
+});
+
+pinSubmit.addEventListener('click', async () => {
+    if (enteredPinBuffer === SECRET_PASSPHRASE_PIN) {
+        authPanel.classList.add('hidden');
+        if (masterScenarios.length === 0) {
+            await loadQuestionsFromFile();
+        }
+        updateAdminPanelList();
+        adminModal.classList.remove('hidden');
+    } else {
+        enteredPinBuffer = "";
+        renderPinDots();
+        alert("ACCESS DENIED: Invalid Passcode Security Signature.");
+    }
+});
+
+function renderPinDots() {
+    pinDots.forEach((dot, index) => {
+        if (index < enteredPinBuffer.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function resetPinPadState() {
+    enteredPinBuffer = "";
+    renderPinDots();
+}
+
+/* --- MAIN PANEL ENGINE HOOKS --- */
+adminClose.addEventListener('click', () => {
+    adminModal.classList.add('hidden');
+});
+
+document.getElementById('tile-titan').addEventListener('click', async () => {
+    if (masterScenarios.length === 0) {
+        await loadQuestionsFromFile();
+    }
+    compileActiveQuizScenarios(); // Scrambles the deck right here!
+    dashboardView.classList.add('hidden');
+    gameView.classList.remove('hidden');
+    startGame();
+});
+
+backBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    gameView.classList.add('hidden');
+    dashboardView.classList.remove('hidden');
+});
+
+// Render Administration System Engine Elements
+function updateAdminPanelList() {
+    if (!scenariosListContainer) return;
+    scenariosListContainer.innerHTML = '';
+    questionCountDisplay.textContent = masterScenarios.length;
+
+    masterScenarios.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
+        card.style.cursor = 'pointer';
+        
+        card.innerHTML = `
+            <div class="admin-item-info" data-index="${index}">
+                <p><strong>#${index + 1}:</strong> ${item.text}</p>
+                <div class="admin-item-meta">Ans: <strong>${item.correct}</strong></div>
+            </div>
+            <div class="admin-actions-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch-control">
+                    <input type="checkbox" ${item.active ? 'checked' : ''} data-toggle-index="${index}">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="delete-scenario-btn" data-delete-index="${index}" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 4px;">🗑️</button>
+            </div>
+        `;
+        
+        // CLICK TO EDIT
+        card.querySelector('.admin-item-info').addEventListener('click', (e) => {
+            const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+            const targetScenario = masterScenarios[idx];
+            
+            formText.value = targetScenario.text;
+            formOptA.value = targetScenario.options[0] || '';
+            formOptB.value = targetScenario.options[1] || '';
+            formOptC.value = targetScenario.options[2] || '';
+            formOptD.value = targetScenario.options[3] || '';
+            
+            if (targetScenario.correct === targetScenario.options[0]) formCorrect.value = "A";
+            else if (targetScenario.correct === targetScenario.options[1]) formCorrect.value = "B";
+            else if (targetScenario.correct === targetScenario.options[2]) formCorrect.value = "C";
+            else if (targetScenario.correct === targetScenario.options[3]) formCorrect.value = "D";
+            else formCorrect.value = "";
+            
+            adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // TOGGLE ON/OFF
+        card.querySelector('input[data-toggle-index]').addEventListener('change', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-toggle-index'));
+            masterScenarios[idx].active = e.target.checked;
+            updateAdminPanelList();
+        });
+
+        // REMOVE/DELETE QUESTION
+        card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
+            
+            if (confirm(`Are you sure you want to permanently delete Question #${idx + 1}?`)) {
+                masterScenarios.splice(idx, 1);
+                updateAdminPanelList();
+            }
+        });
+
+        scenariosListContainer.appendChild(card);
+    });
+
+    jsonOutput.value = JSON.stringify(masterScenarios, null, 4);
+}
+
+// Add New Scenario Action Builder Engine Trigger Hook
+addScenarioBtn.addEventListener('click', () => {
+    const textVal = formText.value.trim();
+    const optA = formOptA.value.trim();
+    const optB = formOptB.value.trim();
+    const optC = formOptC.value.trim();
+    const optD = formOptD.value.trim();
+    const correctSelect = formCorrect.value;
+
+    if (!textVal || !optA || !optB || !optC || !optD || !correctSelect) {
+        alert("Please completely fill out all the question configuration parameters.");
         return;
     }
 
-    scores.forEach((entry, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>#${index + 1}</td>
-            <td>${entry.score} pts</td>
-            <td>${entry.date}</td>
-        `;
-        leaderboardBody.appendChild(row);
-    });
-}
+    const optionsArray = [optA, optB, optC, optD];
+    let correctString = "";
+    if (correctSelect === "A") correctString = optA;
+    if (correctSelect === "B") correctString = optB;
+    if (correctSelect === "C") correctString = optC;
+    if (correctSelect === "D") correctString = optD;
 
-// View Controller Switching Events
-if (highscoreTrigger) {
-    highscoreTrigger.addEventListener('click', () => {
-        updateLeaderboardDisplay();
-        dashboardView.classList.add('hidden');
-        highscoreView.classList.remove('hidden');
+    masterScenarios.push({
+        text: textVal,
+        options: optionsArray,
+        correct: correctString,
+        active: true
     });
-}
 
-if (highscoreBackBtn) {
-    highscoreBackBtn.addEventListener('click', () => {
-        highscoreView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
-    });
-}
+    formText.value = '';
+    formOptA.value = '';
+    formOptB.value = '';
+    formOptC.value = '';
+    formOptD.value = '';
+    formCorrect.value = '';
 
-// Hook into existing game engine structure to record scores dynamically
-const originalNextScenario = nextScenario;
-nextScenario = function() {
-    originalNextScenario();
-    // If the scenario index exceeds active array length, the round is complete
-    if (currentScenarioIndex >= activeScenarios.length && score > 0) {
-        recordEndGameScore(score);
+    updateAdminPanelList();
+});
+
+// Copy JSON Clipboard Tool System Hook Engine Element
+copyJsonBtn.innerText = "📋 COPY UPDATED JSON";
+copyJsonBtn.addEventListener('click', () => {
+    jsonOutput.select();
+    document.execCommand('copy');
+    alert("Configurations copied successfully to clipboard! Update questions.json on GitHub to sync devices.");
+});
+
+// GAMEPLAY SIMULATOR RUNTIME CONTROLLER
+function startGame() {
+    score = 0;
+    currentScenarioIndex = 0;
+    if (scoreDisplay) scoreDisplay.textContent = score;
+    
+    if (activeScenarios.length > 0) {
+        loadScenario();
+    } else {
+        if (scenarioText) scenarioText.textContent = "No active scenarios available. Open configuration settings view to activate questions.";
+        if (optionsContainer) optionsContainer.innerHTML = '';
     }
-};
+}
+
+function loadScenario() {
+    clearInterval(timer);
+    timeLeft = 20;
+    if (timerDisplay) timerDisplay.textContent = timeLeft;
+    
+    timer = setInterval(() => {
+        timeLeft--;
+        if (timerDisplay) timerDisplay.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            nextScenario();
+        }
+    }, 1000);
+
+    const currentScenario = activeScenarios[currentScenarioIndex];
+    if (scenarioText) scenarioText.textContent = currentScenario.text;
+    if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+
+        // Randomise the order of the 4 multiple-choice answers too so button positioning changes!
+        const randomizedOptions = shuffleArray([...currentScenario.options]);
+
+        randomizedOptions.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option;
+            button.addEventListener('click', () => checkAnswer(button, option, currentScenario.correct));
+            optionsContainer.appendChild(button);
+        });
+    }
+}
+
+function checkAnswer(selectedButton, chosenOption, correctOption) {
+    clearInterval(timer); 
+    
+    const allButtons = document.querySelectorAll('.option-btn');
+    allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+
+    if (chosenOption === correctOption) {
+        selectedButton.classList.add('correct');
+        score += 100;
+        if (scoreDisplay) scoreDisplay.textContent = score;
+    } else {
+        selectedButton.classList.add('wrong');
+        allButtons.forEach(btn => {
+            if (btn.textContent === correctOption) btn.classList.add('correct');
+        });
+    }
+
+    setTimeout(() => {
+        nextScenario();
+    }, 1500);
+}
+
+function nextScenario() {
+    currentScenarioIndex++;
+    if (currentScenarioIndex < activeScenarios.length) {
+        loadScenario();
+    } else {
+        if (scenarioText) scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
+        
+        // --- HIGH SCORE RECORDING HOOK ---
+        saveEndGameScore(score);
+        
+        if (optionsContainer) {
+            optionsContainer.innerHTML = '';
+            
+            const restartBtn = document.createElement('button');
+            restartBtn.className = 'option-btn';
+            restartBtn.style.gridColumn = '1 / -1';
+            restartBtn.textContent = 'Play Again';
+            restartBtn.addEventListener('click', () => {
+                compileActiveQuizScenarios(); // Generate a fresh shuffle for the retry!
+                startGame();
+            });
+            optionsContainer.appendChild(restartBtn);
+        }
+    }
+}
+
+document.querySelectorAll('.tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+        const current = document.querySelector('.tile.focused');
+        if (current) current.classList.remove('focused');
+        tile.classList.add('focused');
+    });
+});
+
+// Initial Load Trigger on App Launch
+loadQuestionsFromFile();
+
+
+/* ========================================================================== */
+/*  Isolated JavaScript Modal Leaderboard (Zero-Impact Layout Protection)      */
+/* ========================================================================== */
+
+function saveEndGameScore(finalScore) {
+    if (finalScore <= 0) return;
+    let scores = JSON.parse(localStorage.getItem('tt_high_scores')) || [];
+    scores.push({
+        score: finalScore,
+        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+    });
+    scores.sort((a, b) => b.score - a.score);
+    localStorage.setItem('tt_high_scores', JSON.stringify(scores.slice(0, 10)));
+}
+
+const highscoreTile = document.getElementById('highscore-trigger');
+if (highscoreTile) {
+    highscoreTile.addEventListener('click', () => {
+        // Read Scores
+        const scores = JSON.parse(localStorage.getItem('tt_high_scores')) || [];
+        
+        // Generate table rows
+        let rowsHtml = scores.map((item, idx) => {
+            let color = '#ffffff';
+            if (idx === 0) color = '#ffd700';
+            if (idx === 1) color = '#c0c0c0';
+            if (idx === 2) color = '#cd7f32';
+            return `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <td style="padding: 12px; font-weight: bold; color: ${color};">#${idx + 1}</td>
+                    <td style="padding: 12px; color: #fff;">${item.score} pts</td>
+                    <td style="padding: 12px; color: rgba(255,255,255,0.5); font-size: 0.85rem;">${item.date}</td>
+                </tr>
+            `;
+        }).join('');
+
+        if (scores.length === 0) {
+            rowsHtml = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: rgba(255,255,255,0.4);">No high scores recorded yet!</td></tr>`;
+        }
+
+        // Create modal container dynamically
+        const modal = document.createElement('div');
+        modal.id = 'dynamic-leaderboard-modal';
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 999999; font-family: sans-serif; box-sizing: border-box;';
+        
+        modal.innerHTML = `
+            <div style="background: #1a1d29; width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;">
+                <button id="close-dynamic-leaderboard" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.5rem; cursor: pointer;">&times;</button>
+                <h3 style="margin: 0 0 20px 0; font-size: 1.4rem; color: #ff3366; text-align: center; letter-spacing: 1px; font-weight: bold;">🏆 TOP 10 LEADERBOARD</h3>
+                <div style="max-height: 320px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
+                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Rank</th>
+                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Score</th>
+                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+                <button id="btn-close-dynamic-leaderboard" style="margin-top: 20px; width: 100%; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;">Dismiss</button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Removal logic
+        const closeModal = () => modal.remove();
+        document.getElementById('close-dynamic-leaderboard').addEventListener('click', closeModal);
+        document.getElementById('btn-close-dynamic-leaderboard').addEventListener('click', closeModal);
+    });
+}
