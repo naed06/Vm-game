@@ -27,9 +27,9 @@ const formCorrect = document.getElementById('form-correct');
 const addScenarioBtn = document.getElementById('add-scenario-btn');
 const copyJsonBtn = document.getElementById('copy-json-btn');
 
-// Global Master Question Bank State
-let masterScenarios = []; // Holds absolute array with loaded visibility data properties
-let activeScenarios = []; // Filtered live quiz queue configuration
+// Global Master Dataset Pipeline States
+let masterScenarios = []; 
+let activeScenarios = []; 
 let score = 0;
 let timer;
 let timeLeft = 20;
@@ -39,11 +39,10 @@ let currentScenarioIndex = 0;
 async function loadQuestionsFromFile() {
     try {
         const response = await fetch('questions.json');
-        if (!response.ok) throw new Error('Failed to load file assets');
+        if (!response.ok) throw new Error('No questions data file located');
         
         const rawData = await response.json();
         
-        // Ensure every question has an absolute visible runtime state property toggle
         masterScenarios = rawData.map(item => ({
             text: item.text,
             options: item.options,
@@ -51,10 +50,10 @@ async function loadQuestionsFromFile() {
             active: item.active !== undefined ? item.active : true
         }));
         
-        console.log("Master dataset loaded successfully!");
+        console.log("Master dataset loaded successfully from questions.json!");
     } catch (error) {
-        console.error("Data pipeline initialization error:", error);
-        // Fallback placeholder data if file does not exist yet
+        console.error("Data pipeline load error, using default layout scenario configuration:", error);
+        // Fallback default system sample layout block if local asset file doesn't load yet
         masterScenarios = [
             {
                 text: "Customer needs an absolute budget entry-level plan primarily for light WhatsApp usage. What is the lowest airtime price point?",
@@ -67,12 +66,11 @@ async function loadQuestionsFromFile() {
     updateAdminPanelList();
 }
 
-// Filter out only active state toggled data structures for the active quiz queue configuration
 function compileActiveQuizScenarios() {
     activeScenarios = masterScenarios.filter(item => item.active === true);
 }
 
-// Admin Panel Modals Toggle Triggers
+// Admin Panel Event Core Toggle Listeners
 adminTrigger.addEventListener('click', async () => {
     if (masterScenarios.length === 0) {
         await loadQuestionsFromFile();
@@ -85,7 +83,7 @@ adminClose.addEventListener('click', () => {
     adminModal.classList.add('hidden');
 });
 
-// Launch Game Mode View Port Trigger Hook
+// Launch Tariff Titan Game Selection Engine
 document.getElementById('tile-titan').addEventListener('click', async () => {
     if (masterScenarios.length === 0) {
         await loadQuestionsFromFile();
@@ -104,7 +102,7 @@ backBtn.addEventListener('click', () => {
     dashboardView.classList.remove('hidden');
 });
 
-// Render List & Export Data Generator Pipeline
+// Render Administration System Engine Elements
 function updateAdminPanelList() {
     scenariosListContainer.innerHTML = '';
     questionCountDisplay.textContent = masterScenarios.length;
@@ -116,7 +114,7 @@ function updateAdminPanelList() {
         card.innerHTML = `
             <div class="admin-item-info">
                 <p>${item.text}</p>
-                <div class="admin-item-meta">Ans: <strong>${item.correct}</strong> | Total Choices: ${item.options.length}</div>
+                <div class="admin-item-meta">Ans: <strong>${item.correct}</strong></div>
             </div>
             <label class="switch-control">
                 <input type="checkbox" ${item.active ? 'checked' : ''} data-index="${index}">
@@ -124,7 +122,6 @@ function updateAdminPanelList() {
             </label>
         `;
         
-        // Interactive Toggle Trigger Event Handler Wire Frame Link
         card.querySelector('input').addEventListener('change', (e) => {
             const idx = parseInt(e.target.getAttribute('data-index'));
             masterScenarios[idx].active = e.target.checked;
@@ -134,11 +131,10 @@ function updateAdminPanelList() {
         scenariosListContainer.appendChild(card);
     });
 
-    // Auto update JSON output box visualization
     jsonOutput.value = JSON.stringify(masterScenarios, null, 4);
 }
 
-// Add New Scenario Form Submissions Engine Hook
+// Add New Scenario Action Builder Engine Trigger Hook
 addScenarioBtn.addEventListener('click', () => {
     const textVal = formText.value.trim();
     const optA = formOptA.value.trim();
@@ -148,7 +144,7 @@ addScenarioBtn.addEventListener('click', () => {
     const correctSelect = formCorrect.value;
 
     if (!textVal || !optA || !optB || !optC || !optD || !correctSelect) {
-        alert("Please completely fill out the scenario script parameters and options block.");
+        alert("Please completely fill out all the question configuration parameters.");
         return;
     }
 
@@ -159,7 +155,6 @@ addScenarioBtn.addEventListener('click', () => {
     if (correctSelect === "C") correctString = optC;
     if (correctSelect === "D") correctString = optD;
 
-    // Push structured block object array elements data structures
     masterScenarios.push({
         text: textVal,
         options: optionsArray,
@@ -167,7 +162,7 @@ addScenarioBtn.addEventListener('click', () => {
         active: true
     });
 
-    // Clear UI inputs components
+    // Reset Inputs Components Form Layout Block
     formText.value = '';
     formOptA.value = '';
     formOptB.value = '';
@@ -178,14 +173,14 @@ addScenarioBtn.addEventListener('click', () => {
     updateAdminPanelList();
 });
 
-// Copy Data File Output Exporter Clipboard Event Engine Tool Hook
+// Copy JSON Clipboard Tool System Hook Engine Element
 copyJsonBtn.addEventListener('click', () => {
     jsonOutput.select();
     document.execCommand('copy');
-    alert("JSON configurations copied to clipboard! Paste this block data directly into questions.json on GitHub.");
+    alert("Configurations copied successfully to clipboard! Update questions.json on GitHub.");
 });
 
-// CORE LIVE QUIZ GAME GAMEPLAY RUNTIME ENGINE
+// GAMEPLAY SIMULATOR RUNTIME CONTROLLER
 function startGame() {
     score = 0;
     currentScenarioIndex = 0;
@@ -194,7 +189,7 @@ function startGame() {
     if (activeScenarios.length > 0) {
         loadScenario();
     } else {
-        scenarioText.textContent = "No active scenarios selected. Open settings to check question toggles.";
+        scenarioText.textContent = "No active scenarios available. Open configuration settings view to activate questions.";
         optionsContainer.innerHTML = '';
     }
 }
@@ -253,7 +248,7 @@ function nextScenario() {
     if (currentScenarioIndex < activeScenarios.length) {
         loadScenario();
     } else {
-        scenarioText.textContent = `Game Complete! You scored ${score} points.`;
+        scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
         optionsContainer.innerHTML = '';
         
         const restartBtn = document.createElement('button');
@@ -265,7 +260,7 @@ function nextScenario() {
     }
 }
 
-// Hub selection visual management logic loop toggle tracking loop layout elements UI tracking configuration
+// Focus UI Navigation Handler Wire Frame Link Hooks Loops
 document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
         const current = document.querySelector('.tile.focused');
