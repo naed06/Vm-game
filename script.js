@@ -169,7 +169,7 @@ function updateAdminPanelList() {
     masterScenarios.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = `admin-item-card ${item.active ? '' : 'disabled'}`;
-        card.style.cursor = 'pointer'; // Visual cue that the card is clickable for editing
+        card.style.cursor = 'pointer';
         
         card.innerHTML = `
             <div class="admin-item-info" data-index="${index}">
@@ -185,7 +185,7 @@ function updateAdminPanelList() {
             </div>
         `;
         
-        // 1. CLICK TO EDIT: Populates the text input boxes above
+        // 1. CLICK TO EDIT
         card.querySelector('.admin-item-info').addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
             const targetScenario = masterScenarios[idx];
@@ -196,14 +196,12 @@ function updateAdminPanelList() {
             formOptC.value = targetScenario.options[2] || '';
             formOptD.value = targetScenario.options[3] || '';
             
-            // Map the text back to selection indexes
             if (targetScenario.correct === targetScenario.options[0]) formCorrect.value = "A";
             else if (targetScenario.correct === targetScenario.options[1]) formCorrect.value = "B";
             else if (targetScenario.correct === targetScenario.options[2]) formCorrect.value = "C";
             else if (targetScenario.correct === targetScenario.options[3]) formCorrect.value = "D";
             else formCorrect.value = "";
             
-            // Scroll to the top input container inside the modal smoothly
             adminModal.querySelector('.admin-container').scrollTo({ top: 0, behavior: 'smooth' });
         });
 
@@ -216,7 +214,7 @@ function updateAdminPanelList() {
 
         // 3. REMOVE/DELETE QUESTION
         card.querySelector('.delete-scenario-btn').addEventListener('click', (e) => {
-            e.stopPropagation(); // Stops the element from triggering click-to-edit
+            e.stopPropagation();
             const idx = parseInt(e.currentTarget.getAttribute('data-delete-index'));
             
             if (confirm(`Are you sure you want to permanently delete Question #${idx + 1}?`)) {
@@ -361,6 +359,7 @@ function nextScenario() {
     }
 }
 
+// Handle D-pad style selection highlighting for row-based tiles
 document.querySelectorAll('.tile').forEach(tile => {
     tile.addEventListener('click', () => {
         const current = document.querySelector('.tile.focused');
