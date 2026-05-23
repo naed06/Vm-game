@@ -360,10 +360,6 @@ function nextScenario() {
         loadScenario();
     } else {
         if (scenarioText) scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
-        
-        // --- HIGH SCORE RECORDING HOOK ---
-        saveEndGameScore(score);
-        
         if (optionsContainer) {
             optionsContainer.innerHTML = '';
             
@@ -390,80 +386,3 @@ document.querySelectorAll('.tile').forEach(tile => {
 
 // Initial Load Trigger on App Launch
 loadQuestionsFromFile();
-
-
-/* ========================================================================== */
-/*  Isolated JavaScript Modal Leaderboard (Zero-Impact Layout Protection)      */
-/* ========================================================================== */
-
-function saveEndGameScore(finalScore) {
-    if (finalScore <= 0) return;
-    let scores = JSON.parse(localStorage.getItem('tt_high_scores')) || [];
-    scores.push({
-        score: finalScore,
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-    });
-    scores.sort((a, b) => b.score - a.score);
-    localStorage.setItem('tt_high_scores', JSON.stringify(scores.slice(0, 10)));
-}
-
-const highscoreTile = document.getElementById('highscore-trigger');
-if (highscoreTile) {
-    highscoreTile.addEventListener('click', () => {
-        // Read Scores
-        const scores = JSON.parse(localStorage.getItem('tt_high_scores')) || [];
-        
-        // Generate table rows
-        let rowsHtml = scores.map((item, idx) => {
-            let color = '#ffffff';
-            if (idx === 0) color = '#ffd700';
-            if (idx === 1) color = '#c0c0c0';
-            if (idx === 2) color = '#cd7f32';
-            return `
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
-                    <td style="padding: 12px; font-weight: bold; color: ${color};">#${idx + 1}</td>
-                    <td style="padding: 12px; color: #fff;">${item.score} pts</td>
-                    <td style="padding: 12px; color: rgba(255,255,255,0.5); font-size: 0.85rem;">${item.date}</td>
-                </tr>
-            `;
-        }).join('');
-
-        if (scores.length === 0) {
-            rowsHtml = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: rgba(255,255,255,0.4);">No high scores recorded yet!</td></tr>`;
-        }
-
-        // Create modal container dynamically
-        const modal = document.createElement('div');
-        modal.id = 'dynamic-leaderboard-modal';
-        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 999999; font-family: sans-serif; box-sizing: border-box;';
-        
-        modal.innerHTML = `
-            <div style="background: #1a1d29; width: 90%; max-width: 400px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;">
-                <button id="close-dynamic-leaderboard" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.5rem; cursor: pointer;">&times;</button>
-                <h3 style="margin: 0 0 20px 0; font-size: 1.4rem; color: #ff3366; text-align: center; letter-spacing: 1px; font-weight: bold;">🏆 TOP 10 LEADERBOARD</h3>
-                <div style="max-height: 320px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
-                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Rank</th>
-                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Score</th>
-                                <th style="padding: 12px; color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase;">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rowsHtml}
-                        </tbody>
-                    </table>
-                </div>
-                <button id="btn-close-dynamic-leaderboard" style="margin-top: 20px; width: 100%; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;">Dismiss</button>
-            </div>
-        `;
-
-        document.body.appendChild(modal);
-
-        // Removal logic
-        const closeModal = () => modal.remove();
-        document.getElementById('close-dynamic-leaderboard').addEventListener('click', closeModal);
-        document.getElementById('btn-close-dynamic-leaderboard').addEventListener('click', closeModal);
-    });
-}
