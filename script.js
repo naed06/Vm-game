@@ -3,6 +3,12 @@ const dashboardView = document.getElementById('dashboard-view');
 const gameView = document.getElementById('game-view');
 const backBtn = document.getElementById('game-back-btn');
 
+// Gameplay DOM Hook Elements
+const scenarioText = document.getElementById('scenario-text');
+const optionsContainer = document.getElementById('options-container');
+const scoreDisplay = document.getElementById('game-score');
+const timerDisplay = document.getElementById('game-timer');
+
 // Security Passcode Elements
 const authPanel = document.getElementById('auth-panel');
 const authClose = document.getElementById('auth-close');
@@ -30,7 +36,7 @@ const addScenarioBtn = document.getElementById('add-scenario-btn');
 const copyJsonBtn = document.getElementById('copy-json-btn');
 
 // System Configurations
-const SECRET_PASSPHRASE_PIN = "2026"; // Feel free to update this 4-digit code as required
+const SECRET_PASSPHRASE_PIN = "2026"; 
 let enteredPinBuffer = "";
 
 // Global Master Dataset Pipeline States
@@ -76,10 +82,12 @@ function compileActiveQuizScenarios() {
 }
 
 /* --- SECURITY PIN AUTH LOGIC PIPELINE --- */
-adminTrigger.addEventListener('click', () => {
-    resetPinPadState();
-    authPanel.classList.remove('hidden');
-});
+if (adminTrigger) {
+    adminTrigger.addEventListener('click', () => {
+        resetPinPadState();
+        authPanel.classList.remove('hidden');
+    });
+}
 
 authClose.addEventListener('click', () => {
     authPanel.classList.add('hidden');
@@ -111,7 +119,6 @@ pinSubmit.addEventListener('click', async () => {
         updateAdminPanelList();
         adminModal.classList.remove('hidden');
     } else {
-        // Trigger verification failure pulse animation
         enteredPinBuffer = "";
         renderPinDots();
         alert("ACCESS DENIED: Invalid Passcode Security Signature.");
@@ -156,6 +163,7 @@ backBtn.addEventListener('click', () => {
 
 // Render Administration System Engine Elements
 function updateAdminPanelList() {
+    if (!scenariosListContainer) return;
     scenariosListContainer.innerHTML = '';
     questionCountDisplay.textContent = masterScenarios.length;
 
@@ -235,24 +243,24 @@ copyJsonBtn.addEventListener('click', () => {
 function startGame() {
     score = 0;
     currentScenarioIndex = 0;
-    scoreDisplay.textContent = score;
+    if (scoreDisplay) scoreDisplay.textContent = score;
     
     if (activeScenarios.length > 0) {
         loadScenario();
     } else {
-        scenarioText.textContent = "No active scenarios available. Open configuration settings view to activate questions.";
-        optionsContainer.innerHTML = '';
+        if (scenarioText) scenarioText.textContent = "No active scenarios available. Open configuration settings view to activate questions.";
+        if (optionsContainer) optionsContainer.innerHTML = '';
     }
 }
 
 function loadScenario() {
     clearInterval(timer);
     timeLeft = 20;
-    timerDisplay.textContent = timeLeft;
+    if (timerDisplay) timerDisplay.textContent = timeLeft;
     
     timer = setInterval(() => {
         timeLeft--;
-        timerDisplay.textContent = timeLeft;
+        if (timerDisplay) timerDisplay.textContent = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(timer);
             nextScenario();
@@ -260,16 +268,18 @@ function loadScenario() {
     }, 1000);
 
     const currentScenario = activeScenarios[currentScenarioIndex];
-    scenarioText.textContent = currentScenario.text;
-    optionsContainer.innerHTML = '';
+    if (scenarioText) scenarioText.textContent = currentScenario.text;
+    if (optionsContainer) {
+        optionsContainer.innerHTML = '';
 
-    currentScenario.options.forEach(option => {
-        const button = document.createElement('button');
-        button.className = 'option-btn';
-        button.textContent = option;
-        button.addEventListener('click', () => checkAnswer(button, option, currentScenario.correct));
-        optionsContainer.appendChild(button);
-    });
+        currentScenario.options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option;
+            button.addEventListener('click', () => checkAnswer(button, option, currentScenario.correct));
+            optionsContainer.appendChild(button);
+        });
+    }
 }
 
 function checkAnswer(selectedButton, chosenOption, correctOption) {
@@ -281,7 +291,7 @@ function checkAnswer(selectedButton, chosenOption, correctOption) {
     if (chosenOption === correctOption) {
         selectedButton.classList.add('correct');
         score += 100;
-        scoreDisplay.textContent = score;
+        if (scoreDisplay) scoreDisplay.textContent = score;
     } else {
         selectedButton.classList.add('wrong');
         allButtons.forEach(btn => {
@@ -299,15 +309,17 @@ function nextScenario() {
     if (currentScenarioIndex < activeScenarios.length) {
         loadScenario();
     } else {
-        scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
-        optionsContainer.innerHTML = '';
-        
-        const restartBtn = document.createElement('button');
-        restartBtn.className = 'option-btn';
-        restartBtn.style.gridColumn = '1 / -1';
-        restartBtn.textContent = 'Play Again';
-        restartBtn.addEventListener('click', startGame);
-        optionsContainer.appendChild(restartBtn);
+        if (scenarioText) scenarioText.textContent = `Game Complete! Total Score: ${score} points.`;
+        if (optionsContainer) {
+            optionsContainer.innerHTML = '';
+            
+            const restartBtn = document.createElement('button');
+            restartBtn.className = 'option-btn';
+            restartBtn.style.gridColumn = '1 / -1';
+            restartBtn.textContent = 'Play Again';
+            restartBtn.addEventListener('click', startGame);
+            optionsContainer.appendChild(restartBtn);
+        }
     }
 }
 
@@ -318,3 +330,6 @@ document.querySelectorAll('.tile').forEach(tile => {
         tile.classList.add('focused');
     });
 });
+
+// Initial Load Trigger on App Launch
+loadQuestionsFromFile();
